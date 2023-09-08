@@ -6,8 +6,9 @@ int main()
     cout << "Hello, world!" << endl;
 
     int x;
+    cout << "Enter number\n";
     cin >> x;
-    cout << x;
+    cout << x << endl;
 
     return 0;
 }
