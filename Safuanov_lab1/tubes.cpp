@@ -1,6 +1,7 @@
 #include <iostream>
-#include <fstream>
-#include <sstream>
+#include <fstream> // для работы с файлами
+#include <sstream> // для считывания строки с консоли 
+#include <string> // для проверки типа данных
 
 using namespace std;
 
@@ -18,16 +19,90 @@ struct comp_station {
 	double efficiency;
 };
 
+bool is_string(string check_type) {
+	for (char c : check_type) {
+		if (isdigit(c)) {
+			return false; // Если есть цифра, то это не строка
+		}
+	}
+	return true; // Если не содержит цифры, то это строка
+}
+
+bool find_space(string row) {
+	for (char c : row) {
+		if (c == ' ') {
+			return true;
+		}
+	}
+	return false;
+}
+
 void add_pipe(pipe& obj_pipe) {
 	cout << "Введите название трубы: ";
-	cin.ignore(1000, '\n');
-	getline(cin, obj_pipe.name);
+	while (true) {
+
+		cin >> obj_pipe.name;
+		if (is_string(obj_pipe.name)) {
+			break;
+		}
+		cout << "Данные введены неверно, попробуйте ещё раз: ";
+	}
 	cout << "Введите длину трубы: ";
-	cin >> obj_pipe.length;
+	while (true) {
+		string input1, copy1;
+		cin >> input1;
+		copy1 = input1;
+		getline(cin, copy1);
+		if (find_space(copy1)) {
+			cout << "Данные введены неверно, попробуйте ещё раз: ";
+		}
+		else {
+			try {
+				obj_pipe.length = stod(input1);
+				break;
+			}
+			catch (invalid_argument& myException) {
+				cout << "Данные введены неверно, попробуйте ещё раз: ";
+			}
+		}
+	}
 	cout << "Введите диаметр трубы: ";
-	cin >> obj_pipe.diameter;
+	while (true) {
+		string input2, copy2; // добавляется копия строки, чтобы не затрагивать саму строку
+		cin >> input2;
+		copy2 = input2;
+		getline(cin, copy2);
+		if (find_space(copy2)) {
+			cout << "Данные введены неверно, попробуйте ещё раз: ";
+		}
+		else {
+			try {
+				obj_pipe.diameter = stod(input2);
+				break;
+			}
+			catch (invalid_argument& myException) {
+				cout << "Данные введены неверно, попробуйте ещё раз: ";
+			}
+		}
+	}
 	cout << "Подлежит ли она ремонту?: ";
-	cin >> obj_pipe.maintenance;
+	while (true) {
+		cin >> obj_pipe.maintenance;
+		if (is_string(obj_pipe.name)) {
+			if (obj_pipe.maintenance == "Yes" || obj_pipe.maintenance == "YES") {
+				break;
+			}
+			else if (obj_pipe.maintenance == "No" || obj_pipe.maintenance == "NO") {
+				break;
+			}
+			else {
+				cout << "Данные введены неверно, попробуйте ещё раз: ";
+			}
+		}
+		else {
+			cout << "Данные введены неверно, попробуйте ещё раз: ";
+		}
+	}
 }
 
 void add_comp_station(comp_station& obj_comp_station) {
