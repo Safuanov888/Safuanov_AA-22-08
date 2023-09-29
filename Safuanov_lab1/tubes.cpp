@@ -19,25 +19,6 @@ struct comp_station {
 	double efficiency;
 };
 
-int is_string(string check_type) {
-	int calc = 0;
-	for (char c : check_type) {
-		if (isdigit(c)) {
-			calc += 1; 
-		}
-	}
-	return calc; 
-}
-
-bool find_space(string row) {
-	for (char c : row) {
-		if (c == ' ') {
-			return true;
-		}
-	}
-	return false;
-}
-
 string get_str() {
 	string str;
 	cin >> ws;
@@ -46,39 +27,38 @@ string get_str() {
 }
 
 void add_pipe(pipe& obj_pipe) {
-	std::cout << "Введите название трубы: ";
+	cout << "Введите название трубы: ";
 	obj_pipe.name = get_str();
-	std::cout << "Введите длину трубы: ";
+	cout << "Введите длину трубы: ";
 	cin >> obj_pipe.length;
 	while (cin.fail() || cin.peek() != '\n' || obj_pipe.length < 0) {
 		cin.clear();
 		cin.ignore(1000, '\n');
-		std::cout << "Данные введены неверно, попробуйте ещё раз: ";
+		cout << "Данные введены неверно, попробуйте ещё раз: ";
 		cin >> obj_pipe.length;
 	}
-	std::cout << "Введите диаметр трубы: ";
+	cout << "Введите диаметр трубы: ";
 	cin >> obj_pipe.diameter;
 	while (cin.fail() || cin.peek() != '\n' || obj_pipe.diameter < 0) {
 		cin.clear();
 		cin.ignore(1000, '\n');
-		std::cout << "Данные введены неверно, попробуйте ещё раз: ";
+		cout << "Данные введены неверно, попробуйте ещё раз: ";
 		cin >> obj_pipe.diameter;
 	}
-	std::cout << "Подлежит ли она ремонту?: ";
-	bool maintenance;
-	cin >> maintenance;
-	if (maintenance) {
-		obj_pipe.maintenance = 1;
-	}
-	else {
-		obj_pipe.maintenance = 0;
+	cout << "Подлежит ли она ремонту?: ";
+	cin >> obj_pipe.maintenance;
+	while (cin.fail() || cin.peek() != '\n') {
+		cin.clear();
+		cin.ignore(1000, '\n');
+		cout << "Данные введены неверно, попробуйте ещё раз: ";
+		cin >> obj_pipe.maintenance;
 	}
 }
 
 void add_comp_station(comp_station& obj_comp_station) {
-	std::cout << "Введите название станции: ";
+	cout << "Введите название станции: ";
 	obj_comp_station.name = get_str();
-	std::cout << "Введите количество цехов: ";
+	cout << "Введите количество цехов: ";
 	cin >> obj_comp_station.num_department;
 	while (cin.fail() || cin.peek() != '\n' || obj_comp_station.num_department < 0) {
 		cin.clear();
@@ -88,8 +68,9 @@ void add_comp_station(comp_station& obj_comp_station) {
 	}
 	cout << "Введите количество работающих цехов: ";
 	cin >> obj_comp_station.work_department;
-	while (cin.fail() || cin.peek() != '\n' || obj_comp_station.work_department < 0) {
-		cin.clear();
+	while (cin.fail() || cin.peek() != '\n' || 
+		obj_comp_station.work_department < 0 || obj_comp_station.work_department > obj_comp_station.num_department) { // проверка рабочих станций 
+		cin.clear();																								// должно быть меньше
 		cin.ignore(1000, '\n');
 		cout << "Данные введены неверно, попробуйте ещё раз: ";
 		cin >> obj_comp_station.work_department;
@@ -105,64 +86,89 @@ void add_comp_station(comp_station& obj_comp_station) {
 }
 
 void rewiew(pipe& obj_pipe, comp_station& obj_comp_station) {
-	cout << "					    Труба                                                                 " << '\n';
-	cout << "Название трубы - " << obj_pipe.name << '\n';
-	cout << "Длина трубы - " << obj_pipe.length << '\n';
-	cout << "Диаметр трубы - " << obj_pipe.diameter << '\n';
-	if (obj_pipe.maintenance == 1) {
-		cout << "Нужен ли ремонт: Yes";
+	if (!obj_pipe.name.empty()) {
+		cout << "					    Труба                                                                 " << '\n';
+		cout << "Название трубы - " << obj_pipe.name << '\n';
+		cout << "Длина трубы - " << obj_pipe.length << '\n';
+		cout << "Диаметр трубы - " << obj_pipe.diameter << '\n';
+		if (obj_pipe.maintenance == 1) {
+			cout << "Ремонт?: Yes\n";
+		}
+		else {
+			cout << "Ремонт?: No\n";
+		}
 	}
 	else {
-		cout << "Нужен ли ремонт: No";
+		cout << "						Труба отсутствует\n";
 	}
-	cout << "					    Станция                                                                 " << '\n';
-	cout << "Название станции - " << obj_comp_station.name << '\n';
-	cout << "Количество цехов - " << obj_comp_station.num_department << '\n';
-	cout << "Количество работающих цехов - " << obj_comp_station.work_department << '\n';
-	cout << "Эффективность станции - " << obj_comp_station.efficiency << '\n';
+	if (!obj_comp_station.name.empty()) {
+		cout << "					    Станция                                                                 " << '\n';
+		cout << "Название станции - " << obj_comp_station.name << '\n';
+		cout << "Количество цехов - " << obj_comp_station.num_department << '\n';
+		cout << "Количество работающих цехов - " << obj_comp_station.work_department << '\n';
+		cout << "Эффективность станции - " << obj_comp_station.efficiency << '\n';
+	}
+	else {
+		cout << "						КС отсутствует\n";
+	}
 }
 
 void change_pipe(pipe& obj_pipe) {
-	cout << "Введите название трубы: ";
-	cin.ignore(1000, '\n');
-	getline(cin, obj_pipe.name);
-	cout << "Введите длину трубы: ";
-	cin >> obj_pipe.length;
-	cout << "Введите диаметр трубы: ";
-	cin >> obj_pipe.diameter;
-	cout << "Подлежит ли она ремонту?: ";
-	cin >> obj_pipe.maintenance;
+	if (obj_pipe.name.empty()) {        // проверка на наличие трубы
+		cout << "Вы не ввели трубу\n";
+	}
+	else {
+		cout << "Работает труба или нет(0 - не работает, 1 - работает): ";
+		cin >> obj_pipe.maintenance;
+		while (cin.fail() || cin.peek() != '\n') {
+			cin.clear();
+			cin.ignore(1000, '\n');
+			cout << "Данные введены неверно, попробуйте ещё раз: ";
+			cin >> obj_pipe.maintenance;
+		}
+	}
 }
 
 void change_comp_station(comp_station& obj_comp_station) {
-	cout << "Введите название станции: ";
-	cin.ignore(1000, '\n');
-	getline(cin, obj_comp_station.name);
-	cout << "Введите количество цехов: ";
-	cin >> obj_comp_station.num_department;
-	cout << "Введите количество работающих цехов: ";
-	cin >> obj_comp_station.work_department;
-	cout << "Введите его эффективность: ";
-	cin >> obj_comp_station.efficiency;
+	if (obj_comp_station.name.empty()) {	// проверка на наличие КС
+		cout << "Вы не ввели КС\n";
+	}
+	else {
+		cout << "Сколько цехов задействовано в работе: ";
+		cin >> obj_comp_station.efficiency;
+		while (cin.fail() || cin.peek() != '\n' || obj_comp_station.efficiency < 0) {
+			cin.clear();
+			cin.ignore(1000, '\n');
+			cout << "Данные введены неверно, попробуйте ещё раз: ";
+			cin >> obj_comp_station.efficiency;
+		}
+	}
 }
 
-void save_info(pipe& obj_pipe, comp_station& obj_comp_station) {
-	ofstream inputFile("file.txt");
-	if (inputFile.is_open()) {      // если файл открывается
-		inputFile << obj_pipe.name << endl;
-		inputFile << obj_pipe.length << endl;
-		inputFile << obj_pipe.diameter << endl;
-		inputFile << obj_pipe.maintenance << endl;
-		inputFile << obj_comp_station.name << endl;
-		inputFile << obj_comp_station.num_department << endl;
-		inputFile << obj_comp_station.work_department << endl;
-		inputFile << obj_comp_station.efficiency << endl;
+void save_pipe(pipe& obj_pipe, ofstream& out) {
+	if (out.is_open()) {
+		out << obj_pipe.name;
+		out << obj_pipe.length;
+		out << obj_pipe.diameter;
+		out << obj_pipe.maintenance;
 	}
 	else {
 		cout << "Ошибка!";
 	}
-	inputFile.close();
-	cout << "Данные успешно записаны в файл." << endl;
+	cout << "Данные успешно загружены в файл." << endl;
+}
+
+void save_comp_station(comp_station& obj_comp_station, ofstream& out) {
+	if (out.is_open()) {
+		out << obj_comp_station.name;
+		out << obj_comp_station.num_department;
+		out << obj_comp_station.work_department;
+		out << obj_comp_station.efficiency;
+	}
+	else {
+		cout << "Ошибка!";
+	}
+	cout << "Данные успешно загружены в файл." << endl;
 }
 
 void download_info(pipe& obj_pipe, comp_station& obj_comp_station) {
@@ -184,6 +190,7 @@ void download_info(pipe& obj_pipe, comp_station& obj_comp_station) {
 	cout << "Данные успешно выгружены из файла." << endl;
 }
 
+
 int main() {
 	setlocale(LC_ALL, "Rus"); // Перевод всех символов на русский язык
 	cout << "	Добро пожаловать в консольное приложение, описывающее базовые сущности трубопроводного транспорта газа!!!" << '\n';
@@ -202,6 +209,13 @@ int main() {
 		cout << "0. Выход" << '\n' << '\n';
 		cin.clear();
 		cin >> choice;
+		while (cin.fail() || cin.peek() != '\n' || choice < 0) {
+			cin.clear();
+			cin.ignore(1000, '\n');
+			cout << "Данные введены неверно, попробуйте ещё раз: ";
+			cin >> choice;
+		}
+		ofstream out;
 		switch (choice) {
 		case 1:
 			add_pipe(obj_pipe);
@@ -219,7 +233,20 @@ int main() {
 			change_comp_station(obj_comp_station);
 			break;
 		case 6:
-			save_info(obj_pipe, obj_comp_station);
+			out.open("file.txt");
+			out.close();
+			if (!obj_pipe.name.empty()) {
+				out.open("file.txt", ios_base::app);
+				out << "p\n";
+				save_pipe(obj_pipe, out);
+				out.close();
+			}
+			if (!obj_comp_station.name.empty()) {
+				out.open("file.txt", ios_base::app);
+				out << "c\n";
+				save_comp_station(obj_comp_station, out);
+				out.close();
+			}
 			break;
 		case 7:
 			download_info(obj_pipe, obj_comp_station);
@@ -227,6 +254,9 @@ int main() {
 		case 0:
 			cout << "Выход из программы";
 			exit(0);
+		default:
+			cout << "Введите числа от 0 до 7\n";
+			break;
 		}
 	}
 	return 0;
