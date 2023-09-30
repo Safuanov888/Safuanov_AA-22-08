@@ -26,6 +26,18 @@ string get_str() {
 	return str;
 }
 
+void menu() {
+	cout << "					    Введите необходимую вам цифру                                               " << '\n';
+	cout << "1. Добавить трубу" << '\n';
+	cout << "2. Добавить КС" << '\n';
+	cout << "3. Просмотр всех объектов" << '\n';
+	cout << "4. Редактировать трубу" << '\n';
+	cout << "5. Редактировать КС" << '\n';
+	cout << "6. Сохранить" << '\n';
+	cout << "7. Загрузить" << '\n';
+	cout << "0. Выход" << '\n' << '\n';
+}
+
 void add_pipe(pipe& obj_pipe) {
 	cout << "Введите название трубы: ";
 	obj_pipe.name = get_str();
@@ -70,7 +82,7 @@ void add_comp_station(comp_station& obj_comp_station) {
 	cin >> obj_comp_station.work_department;
 	while (cin.fail() || cin.peek() != '\n' || 
 		obj_comp_station.work_department < 0 || obj_comp_station.work_department > obj_comp_station.num_department) { // проверка рабочих станций 
-		cin.clear();																								// должно быть меньше
+		cin.clear();																								  // должно быть меньше
 		cin.ignore(1000, '\n');
 		cout << "Данные введены неверно, попробуйте ещё раз: ";
 		cin >> obj_comp_station.work_department;
@@ -85,7 +97,7 @@ void add_comp_station(comp_station& obj_comp_station) {
 	}
 }
 
-void rewiew(pipe& obj_pipe, comp_station& obj_comp_station) {
+void view(pipe& obj_pipe, comp_station& obj_comp_station) {
 	if (!obj_pipe.name.empty()) {
 		cout << "					    Труба                                                                 " << '\n';
 		cout << "Название трубы - " << obj_pipe.name << '\n';
@@ -147,66 +159,67 @@ void change_comp_station(comp_station& obj_comp_station) {
 
 void save_pipe(pipe& obj_pipe, ofstream& out) {
 	if (out.is_open()) {
-		out << obj_pipe.name;
-		out << obj_pipe.length;
-		out << obj_pipe.diameter;
-		out << obj_pipe.maintenance;
+		out << obj_pipe.name << endl;
+		out << obj_pipe.length << endl;
+		out << obj_pipe.diameter << endl;
+		out << obj_pipe.maintenance << endl;
 	}
 	else {
 		cout << "Ошибка!";
 	}
-	cout << "Данные успешно загружены в файл." << endl;
+	cout << "Данные трубы загружены в файл." << endl;
 }
 
 void save_comp_station(comp_station& obj_comp_station, ofstream& out) {
 	if (out.is_open()) {
-		out << obj_comp_station.name;
-		out << obj_comp_station.num_department;
-		out << obj_comp_station.work_department;
-		out << obj_comp_station.efficiency;
+		out << obj_comp_station.name << endl;
+		out << obj_comp_station.num_department << endl;
+		out << obj_comp_station.work_department << endl;
+		out << obj_comp_station.efficiency << endl;
 	}
 	else {
 		cout << "Ошибка!";
 	}
-	cout << "Данные успешно загружены в файл." << endl;
+	cout << "Данные КС загружены в файл." << endl;
 }
 
-void download_info(pipe& obj_pipe, comp_station& obj_comp_station) {
-	ifstream outputFile("file.txt");
-	if (outputFile.is_open()) {
-		outputFile >> obj_pipe.name;
-		outputFile >> obj_pipe.length;
-		outputFile >> obj_pipe.diameter;
-		outputFile >> obj_pipe.maintenance;
-		outputFile >> obj_comp_station.num_department;
-		outputFile >> obj_comp_station.name;
-		outputFile >> obj_comp_station.work_department;
-		outputFile >> obj_comp_station.efficiency;
+void download_pipe(pipe& obj_pipe, ifstream& read) {
+	if (read.is_open()) {
+		read >> obj_pipe.name;
+		read >> obj_pipe.length;
+		read >> obj_pipe.diameter;
+		read >> obj_pipe.maintenance;
 	}
 	else {
 		cout << "Ошибка!";
 	}
-	outputFile.close();
-	cout << "Данные успешно выгружены из файла." << endl;
+	cout << "Данные трубы выгружены из файла." << endl;
 }
 
+void download_comp_station(comp_station& obj_comp_station, ifstream& read) {
+	if (read.is_open()) {
+		read >> obj_comp_station.name;
+		read >> obj_comp_station.num_department;
+		read >> obj_comp_station.work_department;
+		read >> obj_comp_station.efficiency;
+	}
+	else {
+		cout << "Ошибка!";
+	}
+	cout << "Данные КС выгружены из файла." << endl;
+}
 
 int main() {
 	setlocale(LC_ALL, "Rus"); // Перевод всех символов на русский язык
 	cout << "	Добро пожаловать в консольное приложение, описывающее базовые сущности трубопроводного транспорта газа!!!" << '\n';
 	pipe obj_pipe;
 	comp_station obj_comp_station;
+	ofstream out;		// объект файла для записи
+	ifstream read;		// объект файла для чтения
+	string line;        // объект файла для чтения файла построчно
 	while (true) {
 		int choice;
-		cout << "					    Введите необходимую вам цифру                                               " << '\n';
-		cout << "1. Добавить трубу" << '\n';
-		cout << "2. Добавить КС" << '\n';
-		cout << "3. Просмотр всех объектов" << '\n';
-		cout << "4. Редактировать трубу" << '\n';
-		cout << "5. Редактировать КС" << '\n';
-		cout << "6. Сохранить" << '\n';
-		cout << "7. Загрузить" << '\n';
-		cout << "0. Выход" << '\n' << '\n';
+		menu();  // вызываем меню
 		cin.clear();
 		cin >> choice;
 		while (cin.fail() || cin.peek() != '\n' || choice < 0) {
@@ -215,7 +228,6 @@ int main() {
 			cout << "Данные введены неверно, попробуйте ещё раз: ";
 			cin >> choice;
 		}
-		ofstream out;
 		switch (choice) {
 		case 1:
 			add_pipe(obj_pipe);
@@ -224,7 +236,7 @@ int main() {
 			add_comp_station(obj_comp_station);
 			break;
 		case 3:
-			rewiew(obj_pipe, obj_comp_station);
+			view(obj_pipe, obj_comp_station);
 			break;
 		case 4:
 			change_pipe(obj_pipe);
@@ -237,19 +249,32 @@ int main() {
 			out.close();
 			if (!obj_pipe.name.empty()) {
 				out.open("file.txt", ios_base::app);
-				out << "p\n";
+				out << "pipe\n";
 				save_pipe(obj_pipe, out);
 				out.close();
 			}
 			if (!obj_comp_station.name.empty()) {
 				out.open("file.txt", ios_base::app);
-				out << "c\n";
+				out << "comp_station\n";
 				save_comp_station(obj_comp_station, out);
 				out.close();
 			}
 			break;
 		case 7:
-			download_info(obj_pipe, obj_comp_station);
+			read.open("file.txt");
+			if (read.peek() == std::ifstream::traits_type::eof()) {  // условие пустоты файла
+				cout << "Файл пуст!";
+			}
+			else {
+				while (getline(read, line)) {
+					if (line.find("pipe") != string::npos) {
+						download_pipe(obj_pipe, read);
+					} 
+					if (line.find("comp_station") != string::npos) {
+						download_comp_station(obj_comp_station, read);
+					}
+				}
+			}
 			break;
 		case 0:
 			cout << "Выход из программы";
