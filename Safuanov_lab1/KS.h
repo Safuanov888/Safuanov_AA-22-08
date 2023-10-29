@@ -20,5 +20,4 @@ public:
 	void change();
 	void download();
 	void save();
-
 };

@@ -4,16 +4,11 @@
 #include <string> // для проверки типа данных
 #include <unordered_map> // наша главная структура данных
 #include "pipe.h"
+#include "KS.h"
 #include "get.h"
 
-using namespace std;
 
-/*struct comp_station {
-	string name;
-	int num_department;
-	int work_department;
-	double efficiency;
-};*/
+using namespace std;
 
 void menu() {
 	cout << "					    Введите необходимую вам цифру                                               " << endl;
@@ -27,52 +22,24 @@ void menu() {
 	cout << "0. Выход" << endl << endl;
 }
 
-
-
-/*void add_comp_station(comp_station& obj_comp_station) {
-	cout << "Введите название станции: ";
-	obj_comp_station.name = get_str();
-	cout << "Введите количество цехов: ";
-	cin >> obj_comp_station.num_department;
-	while (cin.fail() || cin.peek() != '\n' || obj_comp_station.num_department < 0) {
-		cin.clear();
-		cin.ignore(1000, '\n');
-		cout << "Данные введены неверно, попробуйте ещё раз: ";
-		cin >> obj_comp_station.num_department;
+void unordered_map_view(const unordered_map<int, Pipe>& pipe, const unordered_map<int, KS>& ks) {
+	for (auto const& p : pipe) {
+		{
+			Pipe value;
+			value = p.second;
+			value.view();
+		}
 	}
-	cout << "Введите количество работающих цехов: ";
-	cin >> obj_comp_station.work_department;
-	while (cin.fail() || cin.peek() != '\n' || 
-		obj_comp_station.work_department < 0 || obj_comp_station.work_department > obj_comp_station.num_department) { // проверка рабочих станций,
-		cin.clear();																								  // должно быть меньше
-		cin.ignore(1000, '\n');
-		cout << "Данные введены неверно, попробуйте ещё раз: ";
-		cin >> obj_comp_station.work_department;
-	}
-	cout << "Введите его эффективность: ";
-	cin >> obj_comp_station.efficiency;
-	while (cin.fail() || cin.peek() != '\n' || obj_comp_station.efficiency < 0) {
-		cin.clear();
-		cin.ignore(1000, '\n');
-		cout << "Данные введены неверно, попробуйте ещё раз: ";
-		cin >> obj_comp_station.efficiency;
+	for (auto const& k : ks) {
+		{
+			KS value;
+			value = k.second;
+			value.view();
+		}
 	}
 }
 
-void view_comp_station(comp_station & obj_comp_station) {
-	if (!obj_comp_station.name.empty()) {
-		cout << "					    Станция                                                                 " << '\n';
-		cout << "Название станции - " << obj_comp_station.name << '\n';
-		cout << "Количество цехов - " << obj_comp_station.num_department << '\n';
-		cout << "Количество работающих цехов - " << obj_comp_station.work_department << '\n';
-		cout << "Эффективность станции - " << obj_comp_station.efficiency << '\n';
-	}
-	else {
-		cout << "						КС отсутствует\n";
-	}
-}
-
-void view(pipe& obj_pipe, comp_station& obj_comp_station) {
+/*void view(pipe& obj_pipe, comp_station& obj_comp_station) {
 	cout << "Что вы хотите посмотреть? (0 - трубу, 1 - КС, что-то другое - всё)\n";
 	string choice;
 	cin >> choice;
@@ -86,54 +53,13 @@ void view(pipe& obj_pipe, comp_station& obj_comp_station) {
 		view_pipe(obj_pipe);
 		view_comp_station(obj_comp_station);
 	}
-}
-
-void change_comp_station(comp_station& obj_comp_station) {
-	if (obj_comp_station.name.empty()) {	// проверка на наличие КС
-		cout << "Вы не ввели КС\n";
-	}
-	else {
-		cout << "Сколько цехов задействовано в работе: ";
-		cin >> obj_comp_station.efficiency;
-		while (cin.fail() || cin.peek() != '\n' || obj_comp_station.efficiency < 0 || obj_comp_station.work_department > obj_comp_station.num_department) {
-			cin.clear();
-			cin.ignore(1000, '\n');
-			cout << "Данные введены неверно, попробуйте ещё раз: ";
-			cin >> obj_comp_station.efficiency;
-		}
-	}
-}
-
-void save_comp_station(comp_station& obj_comp_station, ofstream& out) {
-	if (out.is_open()) {
-		out << obj_comp_station.name << endl;
-		out << obj_comp_station.num_department << endl;
-		out << obj_comp_station.work_department << endl;
-		out << obj_comp_station.efficiency << endl;
-		cout << "Данные КС загружены в файл." << endl;
-	}
-	else {
-		cout << "Ошибка!";
-	}
-}
-
-void download_comp_station(comp_station& obj_comp_station, ifstream& read) {
-	if (read.is_open()) {
-		read >> obj_comp_station.name;
-		read >> obj_comp_station.num_department;
-		read >> obj_comp_station.work_department;
-		read >> obj_comp_station.efficiency;
-		cout << "Данные КС выгружены из файла." << endl;
-	}
-	else {
-		cout << "Ошибка!";
-	}
 }*/
 
 int main() {
 	setlocale(LC_ALL, "Rus"); // Перевод всех символов на русский язык
 	cout << "	Добро пожаловать в консольное приложение, описывающее базовые сущности трубопроводного транспорта газа!!!" << '\n';
-	unordered_map<int, Pipe> data; 
+	unordered_map<int, Pipe> data_P; 
+	unordered_map<int, KS> data_KS;
 	while (true) {
 		int choice;
 		menu();  // вызываем меню
@@ -152,24 +78,36 @@ int main() {
 
 				obj_pipe.add();
 
-				data.insert({ obj_pipe.getid(), obj_pipe });
+				data_P.insert({ obj_pipe.getid(), obj_pipe });
 				break;
 			}
-			/*case 2:
+			case 2:
 			{
-				add_comp_station(obj_comp_station);
+				KS obj_comp_station;
+
+				obj_comp_station.add();
+
+				data_KS.insert({ obj_comp_station.getid(), obj_comp_station });
 				break;
-			}*/
+			}
 			case 3:
 			{
-				for (auto const& p : data) {
+				for (auto const& p : data_P) {
 					{
 						Pipe l;
 						l = p.second;
 						l.view();
 					}
 				}
+				for (auto const& k : data_KS) {
+					{
+						KS l;
+						l = k.second;
+						l.view();
+					}
+				}
 				break;
+
 			}
 			/*case 4:
 			{

@@ -9,7 +9,8 @@ int Pipe::Nextid = 1;
 
 Pipe::Pipe()
 {
-	this->id = Nextid++;
+	this->id = Nextid;
+	Nextid += 2;
 }
 
 void Pipe::add() {
@@ -44,6 +45,7 @@ void Pipe::add() {
 void Pipe::view() {
 	if (!name.empty()) {
 		cout << "					    Труба                                                                 " << '\n';
+		cout << getid() << endl;
 		cout << "Название трубы - " << name << '\n';
 		cout << "Длина трубы - " << length << '\n';
 		cout << "Диаметр трубы - " << diameter << '\n';
