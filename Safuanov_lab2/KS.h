@@ -19,5 +19,5 @@ public:
 	void view();
 	void change();
 	void download();
-	void save();
+	void save(ofstream& out, int id);
 };

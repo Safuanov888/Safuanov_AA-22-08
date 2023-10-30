@@ -77,14 +77,14 @@ void Pipe::change() {
 	}
 }
 
-void Pipe::save() {
-	ofstream out;
+void Pipe::save(ofstream& out, int id) {
 	if (out.is_open()) {
+		out << "pipe " << id << endl;
 		out << name << endl;
 		out << length << endl;
 		out << diameter << endl;
-		out << maintenance << endl;
-		cout << "Данные трубы загружены в файл." << endl;
+		out << maintenance << endl << endl;
+		cout << "Данные трубы " << id << " загружены в файл." << endl;
 	}
 	else {
 		cout << "Ошибка!";

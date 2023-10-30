@@ -94,16 +94,16 @@ int main() {
 			{
 				for (auto const& p : data_P) {
 					{
-						Pipe l;
-						l = p.second;
-						l.view();
+						Pipe value;
+						value = p.second;
+						value.view();
 					}
 				}
 				for (auto const& k : data_KS) {
 					{
-						KS l;
-						l = k.second;
-						l.view();
+						KS value;
+						value = k.second;
+						value.view();
 					}
 				}
 				break;
@@ -119,20 +119,33 @@ int main() {
 				change_comp_station(obj_comp_station);
 				break;
 			}*/
-			/*case 6:
+			case 6:
 			{
-				ofstream out;
-				out.open("file.txt");
-				if (!obj_pipe.name.empty()) {
-					out << "pipe\n";
-					save_pipe(obj_pipe, out);
+				ofstream out("file.txt");
+				for (auto const& p : data_P) {
+					{
+						int pipe_id;
+						Pipe pipe_value;
+						pipe_value = p.second;
+						pipe_id = p.first;
+						if (!pipe_value.name.empty()) {
+							pipe_value.save(out, pipe_id);
+						}
+					}
 				}
-				if (!obj_comp_station.name.empty()) {
-					out << "comp_station\n";
-					save_comp_station(obj_comp_station, out);
+				for (auto const& k : data_KS) {
+					{
+						int ks_id;
+						KS ks_value;
+						ks_value = k.second;
+						ks_id = k.first;
+						if (!ks_value.name.empty()) {
+							ks_value.save(out, ks_id);
+						}
+					}
 				}
 				break;
-			}
+			}/*
 			case 7:
 			{
 				read.open("file.txt");

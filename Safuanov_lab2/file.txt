@@ -1,5 +1,22 @@
-pipe
-nord stream I
-10000
-1400
+pipe 1
 1
+1
+1
+1
+
+pipe 3
+2
+2
+2
+0
+
+comp 2
+1
+1
+1
+1
+comp 4
+2
+2
+2
+2

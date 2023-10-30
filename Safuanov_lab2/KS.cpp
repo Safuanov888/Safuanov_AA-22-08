@@ -73,14 +73,14 @@ void KS::change() {
 	}
 }
 
-void KS::save() {
-	ofstream out;
+void KS::save(ofstream& out, int id) {
 	if (out.is_open()) {
+		out << "comp " << id << endl;
 		out << name << endl;
 		out << num_department << endl;
 		out << work_department << endl;
-		out << efficiency << endl;
-		cout << "Данные КС загружены в файл." << endl;
+		out << efficiency << endl << endl;
+		cout << "Данные КС "<< id << " загружены в файл." << endl;
 	}
 	else {
 		cout << "Ошибка!";
