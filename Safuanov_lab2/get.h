@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-#include <string> // для проверки типа данны
+#include <string> // для проверки типа данных
 
 using namespace std;
 
