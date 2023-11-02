@@ -98,7 +98,6 @@ void Pipe::download(ifstream& read, unordered_map<int, Pipe>& data_P) {
 		read >> length;
 		read >> diameter;
 		read >> maintenance;
-		cout << "Данные трубы выгружены из файла." << endl;
 
 	}
 	else {

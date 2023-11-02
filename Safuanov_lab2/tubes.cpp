@@ -22,38 +22,73 @@ void menu() {
 	cout << "0. Выход" << endl << endl;
 }
 
-void unordered_map_view(const unordered_map<int, Pipe>& pipe, const unordered_map<int, KS>& ks) {
-	for (auto const& p : pipe) {
-		{
-			Pipe value;
-			value = p.second;
-			value.view();
+template<typename T>
+
+vector<int> press_str(const unordered_map<int, T>& mas, string value) {
+	vector<int> g;
+	for (auto const& f : mas) {
+		T obj;
+		int id;
+		obj = f.second;
+		id = f.first;
+		if (obj.name == value) {
+			g.push_back(id);
 		}
 	}
-	for (auto const& k : ks) {
-		{
-			KS value;
-			value = k.second;
+	return g;
+}
+
+vector<int> press_bool(const unordered_map<int, Pipe>& mas, bool value) {
+	vector<int> g;
+	for (auto const& f : mas) {
+		Pipe obj;
+		int id;
+		obj = f.second;
+		id = f.first;
+		if (obj.maintenance == value) {
+			g.push_back(id);
+		}
+	}
+	return g;
+}
+
+vector<int> press_double(const unordered_map<int, KS>& mas, double value) {
+	vector<int> g;
+	for (auto const& f : mas) {
+		KS obj;
+		int id;
+		double percent;
+		obj = f.second;
+		id = f.first;
+		percent = 100 * ((double)(obj.num_department - obj.work_department) / (double)obj.num_department);
+		if (percent == value) {
+			g.push_back(id);
+		}
+	}
+	return g;
+}
+
+template <typename M>
+
+void view_data(unordered_map<int, M>& mas) {
+	for (auto const& pair : mas) {
+		M value;
+		value = pair.second;
+		value.view();
+	}
+}
+
+template <typename F>
+
+void find_id(unordered_map<int, F>& mas, int id) {
+	for (auto const& pair : mas) {
+		if (id == pair.first) {
+			F value;
+			value = pair.second;
 			value.view();
 		}
 	}
 }
-
-/*void view(pipe& obj_pipe, comp_station& obj_comp_station) {
-	cout << "Что вы хотите посмотреть? (0 - трубу, 1 - КС, что-то другое - всё)\n";
-	string choice;
-	cin >> choice;
-	if (choice == "0") {
-		view_pipe(obj_pipe);
-	}
-	else if (choice == "1") {
-		view_comp_station(obj_comp_station);
-	}
-	else {
-		view_pipe(obj_pipe);
-		view_comp_station(obj_comp_station);
-	}
-}*/
 
 int main() {
 	setlocale(LC_ALL, "Rus"); // Перевод всех символов на русский язык
@@ -92,22 +127,62 @@ int main() {
 			}
 			case 3:
 			{
-				for (auto const& p : data_P) {
-					{
-						Pipe value;
-						value = p.second;
-						value.view();
-					}
+				cout << "1 - посмотреть все объекты, 0 - отфильтровать информацию: ";
+				string choice1;
+				cin >> choice1;
+				if (choice1 == "1") {
+					view_data(data_P);
+					view_data(data_KS);
 				}
-				for (auto const& k : data_KS) {
-					{
-						KS value;
-						value = k.second;
-						value.view();
+				else {
+					string choice2;
+					vector<int> arr;
+					cout << "1 - Трубу, 0 - КС: ";
+					cin >> choice2;
+					if (choice2 == "1") {
+						string choice3;
+						cout << "1 - по названию, 0 - по ремонту: ";
+						cin >> choice3;
+						if (choice3 == "1") {
+							string name;
+							cout << "Введите название: ";
+							cin >> name;
+							arr = press_str(data_P, name);
+						}
+						else {
+							bool maintenance;
+							cout << "1 - в ремонте, 0 - нет";
+							cin >> maintenance;
+							arr = press_bool(data_P, maintenance);
+						}
+					}
+					else {
+						string choice4;
+						cout << "1 - по названию, 0 - по проценту незадействованных цехов: ";
+						cin >> choice4;
+						if (choice4 == "1") {
+							string name;
+							cout << "Введите название: ";
+							cin >> name;
+							arr = press_str(data_KS, name);
+						}
+						else {
+							double non_working;
+							cout << "Введите процент: ";
+							cin >> non_working;
+							arr = press_double(data_KS, non_working);
+						}
+					}
+					for (int id : arr) {
+						if (arr[0] % 2 == 1) {
+							find_id(data_P, id);
+						}
+						else {
+							find_id(data_KS, id);
+						}
 					}
 				}
 				break;
-
 			}
 			/*case 4:
 			{

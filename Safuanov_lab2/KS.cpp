@@ -94,7 +94,6 @@ void KS::download(ifstream& read, unordered_map<int, KS>& data_KS) {
 		read >> num_department;
 		read >> work_department;
 		read >> efficiency;
-		cout << "Данные КС выгружены из файла." << endl;
 	}
 	else {
 		cout << "Ошибка!";

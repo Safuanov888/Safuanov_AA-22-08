@@ -1,10 +1,5 @@
 pipe 1
-asdjkjasd
-3232
-2
+sever
+2222
 1
-comp 2
-sdjal
-19
-2
-0
+1
