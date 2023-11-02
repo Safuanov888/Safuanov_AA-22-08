@@ -145,26 +145,37 @@ int main() {
 					}
 				}
 				break;
-			}/*
+			}
 			case 7:
 			{
-				read.open("file.txt");
+				ifstream read("file.txt");
 				if (read.peek() == std::ifstream::traits_type::eof()) {  // условие пустоты файла
 					cout << "Файл пуст!\n";
 				}
 				else {
 					string line;
 					while (getline(read, line)) {
-						if (line.find("pipe") != string::npos) {
-							download_pipe(obj_pipe, read);
+						istringstream iss(line);
+						string Name;
+
+						int id;
+						iss >> Name >> id;
+						if (Name == "pipe") {
+							Pipe read_pipe;
+							read_pipe.download(read, data_P);
+							data_P.insert({ id, read_pipe});
+							cout << "Данные трубы " << id << " выгружены из файла." << endl;
 						}
-						if (line.find("comp_station") != string::npos) {
-							download_comp_station(obj_comp_station, read);
+						if (Name == "comp") {
+							KS read_ks;
+							read_ks.download(read, data_KS);
+							data_KS.insert({ id, read_ks});
+							cout << "Данные КС " << id << " выгружены из файла." << endl;
 						}
 					}
 				}
 				break;
-			}*/
+			}
 			case 0:
 			{
 				cout << "Выход из программы";

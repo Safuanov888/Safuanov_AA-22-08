@@ -2,6 +2,7 @@
 #include "get.h"
 #include <fstream>
 #include <iostream>
+#include <unordered_map>
 
 using namespace std;
 
@@ -79,7 +80,7 @@ void KS::save(ofstream& out, int id) {
 		out << name << endl;
 		out << num_department << endl;
 		out << work_department << endl;
-		out << efficiency << endl << endl;
+		out << efficiency << endl;
 		cout << "Данные КС "<< id << " загружены в файл." << endl;
 	}
 	else {
@@ -87,8 +88,7 @@ void KS::save(ofstream& out, int id) {
 	}
 }
 
-void KS::download() {
-	ifstream read;
+void KS::download(ifstream& read, unordered_map<int, KS>& data_KS) {
 	if (read.is_open()) {
 		read >> name;
 		read >> num_department;

@@ -2,6 +2,7 @@
 #include "get.h"
 #include <fstream>
 #include <iostream>
+#include <unordered_map>
 
 using namespace std;
 
@@ -83,7 +84,7 @@ void Pipe::save(ofstream& out, int id) {
 		out << name << endl;
 		out << length << endl;
 		out << diameter << endl;
-		out << maintenance << endl << endl;
+		out << maintenance << endl;
 		cout << "Данные трубы " << id << " загружены в файл." << endl;
 	}
 	else {
@@ -91,8 +92,7 @@ void Pipe::save(ofstream& out, int id) {
 	}
 }
 
-void Pipe::download() {
-	ifstream read;
+void Pipe::download(ifstream& read, unordered_map<int, Pipe>& data_P) {
 	if (read.is_open()) {
 		read >> name;
 		read >> length;

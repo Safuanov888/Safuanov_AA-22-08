@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <fstream>
+#include <unordered_map>
 
 using namespace std;
 
@@ -18,6 +19,6 @@ public:
 	void add();
 	void view();
 	void change();
-	void download();
+	void download(ifstream& read, unordered_map<int, KS>& data_KS);
 	void save(ofstream& out, int id);
 };

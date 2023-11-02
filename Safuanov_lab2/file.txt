@@ -1,22 +1,10 @@
 pipe 1
-1
-1
-1
-1
-
-pipe 3
+asdjkjasd
+3232
 2
-2
+1
+comp 2
+sdjal
+19
 2
 0
-
-comp 2
-1
-1
-1
-1
-comp 4
-2
-2
-2
-2
