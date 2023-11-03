@@ -18,30 +18,11 @@ void KS::add() {
 	cout << "Введите название станции: ";
 	name = get_str();
 	cout << "Введите количество цехов: ";
-	cin >> num_department;
-	while (cin.fail() || cin.peek() != '\n' || num_department < 0) {
-		cin.clear();
-		cin.ignore(1000, '\n');
-		cout << "Данные введены неверно, попробуйте ещё раз: ";
-		cin >> num_department;
-	}
+	num_department = get_int();
 	cout << "Введите количество работающих цехов: ";
-	cin >> work_department;
-	while (cin.fail() || cin.peek() != '\n' ||
-		work_department < 0 || work_department > num_department) { // проверка рабочих станций, должно быть меньше
-		cin.clear();																								
-		cin.ignore(1000, '\n');
-		cout << "Данные введены неверно, попробуйте ещё раз: ";
-		cin >> work_department;
-	}
+	work_department = get_int();
 	cout << "Введите его эффективность: ";
-	cin >> efficiency;
-	while (cin.fail() || cin.peek() != '\n' || efficiency < 0) {
-		cin.clear();
-		cin.ignore(1000, '\n');
-		cout << "Данные введены неверно, попробуйте ещё раз: ";
-		cin >> efficiency;
-	}
+	efficiency = get_double();
 }
 
 void KS::view() {
@@ -76,7 +57,7 @@ void KS::change() {
 
 void KS::save(ofstream& out, int id) {
 	if (out.is_open()) {
-		out << "comp " << id << endl;
+		out << "comp"<< endl << id << endl;
 		out << name << endl;
 		out << num_department << endl;
 		out << work_department << endl;

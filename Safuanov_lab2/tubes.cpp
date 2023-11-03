@@ -3,6 +3,7 @@
 #include <sstream> // для считывания строки с консоли 
 #include <string> // для проверки типа данных
 #include <unordered_map> // наша главная структура данных
+#include <unordered_set>
 #include "pipe.h"
 #include "KS.h"
 #include "get.h"
@@ -22,9 +23,56 @@ void menu() {
 	cout << "0. Выход" << endl << endl;
 }
 
-template<typename T>
+template <typename I>
+vector<int> get_ids(const unordered_map<int, I>& mas) 
+{
+	unordered_set<int> ids;
+	cout << "Введите id; если закончили, то -1" << endl;
+	while (1) {
+		int id = get_int();
+		if (id == -1) {
+			break;
+		}
+		else if (mas.contains(id)) {
+			ids.insert(id);
+		}
+		else {
+			cout << "Нет объекта с этим id";
+		}
+		if (ids.size() == mas.size()) {
+			break;
+		}
+	}
+	return vector<int>(ids.begin(), ids.end());
+}
 
-vector<int> press_str(const unordered_map<int, T>& mas, string value) {
+template<typename T1, typename T2>
+using filter = bool(*)(const T1& mas, T2 param);
+
+template<typename T>
+bool check_by_name(const T& mas, string name) {
+	return mas.name.find(name) != string::npos;
+}
+
+bool check_by_status(const Pipe& mas, bool status) {
+	return mas.maintenance == status;
+}
+
+bool check_by_non_working(const KS& mas, double non_working) {
+	return 100 * ((double)(mas.num_department - mas.work_department) / (double)mas.num_department) == non_working;
+}
+
+template <typename T1, typename T2>
+vector<int> find_by_filter(const unordered_map<int, T1>& mas, filter<T1, T2> f, T2 par) {
+	unordered_set<int> ids;
+	for (auto& pair : mas) {
+		if (f(pair.second, par)) {
+			ids.insert(pair.first);
+		}
+	}
+	return ids;
+}
+/*vector<int> filter_str(const unordered_map<int, T>& mas, string value) {
 	vector<int> g;
 	for (auto const& f : mas) {
 		T obj;
@@ -38,7 +86,7 @@ vector<int> press_str(const unordered_map<int, T>& mas, string value) {
 	return g;
 }
 
-vector<int> press_bool(const unordered_map<int, Pipe>& mas, bool value) {
+vector<int> filter_bool(const unordered_map<int, Pipe>& mas, bool value) {
 	vector<int> g;
 	for (auto const& f : mas) {
 		Pipe obj;
@@ -52,7 +100,7 @@ vector<int> press_bool(const unordered_map<int, Pipe>& mas, bool value) {
 	return g;
 }
 
-vector<int> press_double(const unordered_map<int, KS>& mas, double value) {
+vector<int> filter_double(const unordered_map<int, KS>& mas, double value) {
 	vector<int> g;
 	for (auto const& f : mas) {
 		KS obj;
@@ -67,9 +115,8 @@ vector<int> press_double(const unordered_map<int, KS>& mas, double value) {
 	}
 	return g;
 }
-
+*/
 template <typename M>
-
 void view_data(unordered_map<int, M>& mas) {
 	for (auto const& pair : mas) {
 		M value;
@@ -79,8 +126,7 @@ void view_data(unordered_map<int, M>& mas) {
 }
 
 template <typename F>
-
-void find_id(unordered_map<int, F>& mas, int id) {
+void view_id(unordered_map<int, F>& mas, int id) {
 	for (auto const& pair : mas) {
 		if (id == pair.first) {
 			F value;
@@ -96,16 +142,9 @@ int main() {
 	unordered_map<int, Pipe> data_P; 
 	unordered_map<int, KS> data_KS;
 	while (true) {
-		int choice;
 		menu();  // вызываем меню
 		cin.clear();
-		cin >> choice;
-		while (cin.fail() || cin.peek() != '\n' || choice < 0) {
-			cin.clear();
-			cin.ignore(1000, '\n');
-			cout << "Данные введены неверно, попробуйте ещё раз: ";
-			cin >> choice;
-		}
+		int choice = get_int();
 		switch (choice) {
 			case 1:
 			{
@@ -128,68 +167,82 @@ int main() {
 			case 3:
 			{
 				cout << "1 - посмотреть все объекты, 0 - отфильтровать информацию: ";
-				string choice1;
-				cin >> choice1;
+				string choice1 = get_str();
 				if (choice1 == "1") {
 					view_data(data_P);
 					view_data(data_KS);
 				}
 				else {
-					string choice2;
 					vector<int> arr;
 					cout << "1 - Трубу, 0 - КС: ";
-					cin >> choice2;
+					string choice2 = get_str();
 					if (choice2 == "1") {
-						string choice3;
 						cout << "1 - по названию, 0 - по ремонту: ";
-						cin >> choice3;
+						string choice3 = get_str();
 						if (choice3 == "1") {
-							string name;
 							cout << "Введите название: ";
-							cin >> name;
-							arr = press_str(data_P, name);
+							string name = get_str();
+							arr = filter_str(data_P, name);
 						}
 						else {
 							bool maintenance;
 							cout << "1 - в ремонте, 0 - нет";
 							cin >> maintenance;
-							arr = press_bool(data_P, maintenance);
+							arr = filter_bool(data_P, maintenance);
 						}
 					}
 					else {
-						string choice4;
 						cout << "1 - по названию, 0 - по проценту незадействованных цехов: ";
-						cin >> choice4;
+						string choice4 = get_str();
 						if (choice4 == "1") {
-							string name;
 							cout << "Введите название: ";
-							cin >> name;
-							arr = press_str(data_KS, name);
+							string name = get_str();
+							arr = filter_str(data_KS, name);
 						}
 						else {
 							double non_working;
 							cout << "Введите процент: ";
 							cin >> non_working;
-							arr = press_double(data_KS, non_working);
+							arr = filter_double(data_KS, non_working);
 						}
 					}
 					for (int id : arr) {
 						if (arr[0] % 2 == 1) {
-							find_id(data_P, id);
+							view_id(data_P, id);
 						}
 						else {
-							find_id(data_KS, id);
+							view_id(data_KS, id);
 						}
 					}
 				}
 				break;
 			}
-			/*case 4:
+			case 4:
 			{
-				change_pipe(obj_pipe);
-				break;
+				if (!data_P.empty()) {
+					cout << "1 - удаление, 0 - изменение трубы: ";
+					string choice = get_str();
+					vector<int> ids;
+					while (1) {
+						if (choice == "1") {
+							ids = get_ids(data_P);
+							if (!ids.empty()) {
+								for (int id : ids) {
+									data_P.erase(id);
+								}
+							}
+							else {
+								cout << "Вы не выбрали id" << endl;
+							}
+							break;
+						}
+						else {
+
+						}
+					} 
+				}
 			}
-			case 5:
+			/*case 5:
 			{
 				change_comp_station(obj_comp_station);
 				break;
@@ -228,25 +281,21 @@ int main() {
 					cout << "Файл пуст!\n";
 				}
 				else {
-					string line;
-					while (getline(read, line)) {
-						istringstream iss(line);
-						string Name;
-
-						int id;
-						iss >> Name >> id;
+					string Name;
+					while (getline(read, Name)) {
+						//string Name;
 						if (Name == "pipe") {
 							Pipe read_pipe;
 							read_pipe.download(read, data_P);
-							data_P.insert({ id, read_pipe});
-							cout << "Данные трубы " << id << " выгружены из файла." << endl;
+							data_P.insert({ read_pipe.getid(), read_pipe});
+							cout << "Данные трубы " << read_pipe.getid() << " выгружены из файла." << endl;
 						}
-						if (Name == "comp") {
+						/*if (Name == "comp") {
 							KS read_ks;
 							read_ks.download(read, data_KS);
 							data_KS.insert({ id, read_ks});
 							cout << "Данные КС " << id << " выгружены из файла." << endl;
-						}
+						}*/
 					}
 				}
 				break;

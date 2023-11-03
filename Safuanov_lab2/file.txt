@@ -1,5 +1,12 @@
-pipe 1
-sever
-2222
+pipe
+1
+A
 1
 1
+1
+pipe
+3
+B
+2
+2
+0

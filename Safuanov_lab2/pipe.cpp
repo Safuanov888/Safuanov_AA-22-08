@@ -18,29 +18,11 @@ void Pipe::add() {
 	cout << "Введите название трубы: ";
 	name = get_str();
 	cout << "Введите длину трубы: ";
-	cin >> length;
-	while (cin.fail() || cin.peek() != '\n' || length < 0) {
-		cin.clear();
-		cin.ignore(1000, '\n');
-		cout << "Данные введены неверно, попробуйте ещё раз: ";
-		cin >> length;
-	}
+	length = get_int();
 	cout << "Введите диаметр трубы: ";
-	cin >> diameter;
-	while (cin.fail() || cin.peek() != '\n' || diameter < 0) {
-		cin.clear();
-		cin.ignore(1000, '\n');
-		cout << "Данные введены неверно, попробуйте ещё раз: ";
-		cin >> diameter;
-	}
+	diameter = get_int();
 	cout << "Подлежит ли она ремонту?: ";
-	cin >> maintenance;
-	while (cin.fail() || cin.peek() != '\n') {
-		cin.clear();
-		cin.ignore(1000, '\n');
-		cout << "Данные введены неверно, попробуйте ещё раз: ";
-		cin >> maintenance;
-	}
+	maintenance = get_bool();
 }
 
 void Pipe::view() {
@@ -80,7 +62,8 @@ void Pipe::change() {
 
 void Pipe::save(ofstream& out, int id) {
 	if (out.is_open()) {
-		out << "pipe " << id << endl;
+		out << "pipe" << endl;
+		out << id << endl;
 		out << name << endl;
 		out << length << endl;
 		out << diameter << endl;
@@ -94,6 +77,7 @@ void Pipe::save(ofstream& out, int id) {
 
 void Pipe::download(ifstream& read, unordered_map<int, Pipe>& data_P) {
 	if (read.is_open()) {
+		read >> id;
 		read >> name;
 		read >> length;
 		read >> diameter;
