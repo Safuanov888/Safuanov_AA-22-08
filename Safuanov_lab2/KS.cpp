@@ -57,7 +57,8 @@ void KS::change() {
 
 void KS::save(ofstream& out, int id) {
 	if (out.is_open()) {
-		out << "comp"<< endl << id << endl;
+		out << "comp"<< endl;
+		out << id << endl;
 		out << name << endl;
 		out << num_department << endl;
 		out << work_department << endl;
@@ -71,6 +72,7 @@ void KS::save(ofstream& out, int id) {
 
 void KS::download(ifstream& read, unordered_map<int, KS>& data_KS) {
 	if (read.is_open()) {
+		read >> id;
 		read >> name;
 		read >> num_department;
 		read >> work_department;

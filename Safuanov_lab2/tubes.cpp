@@ -3,10 +3,12 @@
 #include <sstream> // для считывания строки с консоли 
 #include <string> // для проверки типа данных
 #include <unordered_map> // наша главная структура данных
+#include <cmath> // для round
 #include <unordered_set>
 #include "pipe.h"
 #include "KS.h"
 #include "get.h"
+
 
 
 using namespace std;
@@ -50,20 +52,20 @@ template<typename T1, typename T2>
 using filter = bool(*)(const T1& mas, T2 param);
 
 template<typename T>
-bool check_by_name(const T& mas, string name) {
+bool filter_by_name(const T& mas, string name) {
 	return mas.name.find(name) != string::npos;
 }
 
-bool check_by_status(const Pipe& mas, bool status) {
+bool filter_by_status(const Pipe& mas, bool status) {
 	return mas.maintenance == status;
 }
 
-bool check_by_non_working(const KS& mas, double non_working) {
-	return 100 * ((double)(mas.num_department - mas.work_department) / (double)mas.num_department) == non_working;
+bool filter_by_non_working(const KS& mas, int non_working) {
+	return mas.num_department - mas.work_department == mas.num_department * non_working / 100;
 }
 
 template <typename T1, typename T2>
-vector<int> find_by_filter(const unordered_map<int, T1>& mas, filter<T1, T2> f, T2 par) {
+unordered_set<int> find_by_filter(const unordered_map<int, T1>& mas, filter<T1, T2> f, T2 par) {
 	unordered_set<int> ids;
 	for (auto& pair : mas) {
 		if (f(pair.second, par)) {
@@ -173,7 +175,6 @@ int main() {
 					view_data(data_KS);
 				}
 				else {
-					vector<int> arr;
 					cout << "1 - Трубу, 0 - КС: ";
 					string choice2 = get_str();
 					if (choice2 == "1") {
@@ -182,13 +183,16 @@ int main() {
 						if (choice3 == "1") {
 							cout << "Введите название: ";
 							string name = get_str();
-							arr = filter_str(data_P, name);
+							for (int i : find_by_filter(data_P, filter_by_name, name)) {
+								view_id(data_P, i);
+							}
 						}
 						else {
-							bool maintenance;
-							cout << "1 - в ремонте, 0 - нет";
-							cin >> maintenance;
-							arr = filter_bool(data_P, maintenance);
+							cout << "Введите статус: ";
+							bool maintenance = get_bool();
+							for (int i : find_by_filter(data_P, filter_by_status, maintenance)) {
+								view_id(data_P, i);
+							}
 						}
 					}
 					else {
@@ -197,21 +201,16 @@ int main() {
 						if (choice4 == "1") {
 							cout << "Введите название: ";
 							string name = get_str();
-							arr = filter_str(data_KS, name);
+							for (int i : find_by_filter(data_KS, filter_by_name, name)) {
+								view_id(data_KS, i);
+							}
 						}
 						else {
-							double non_working;
 							cout << "Введите процент: ";
-							cin >> non_working;
-							arr = filter_double(data_KS, non_working);
-						}
-					}
-					for (int id : arr) {
-						if (arr[0] % 2 == 1) {
-							view_id(data_P, id);
-						}
-						else {
-							view_id(data_KS, id);
+							int non_working = get_double();
+							for (int i : find_by_filter(data_KS, filter_by_non_working, non_working)) {
+								view_id(data_KS, i);
+							}
 						}
 					}
 				}
@@ -290,12 +289,12 @@ int main() {
 							data_P.insert({ read_pipe.getid(), read_pipe});
 							cout << "Данные трубы " << read_pipe.getid() << " выгружены из файла." << endl;
 						}
-						/*if (Name == "comp") {
+						if (Name == "comp") {
 							KS read_ks;
 							read_ks.download(read, data_KS);
-							data_KS.insert({ id, read_ks});
-							cout << "Данные КС " << id << " выгружены из файла." << endl;
-						}*/
+							data_KS.insert({ read_ks.getid(), read_ks});
+							cout << "Данные КС " << read_ks.getid() << " выгружены из файла." << endl;
+						}
 					}
 				}
 				break;
