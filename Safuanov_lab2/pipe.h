@@ -18,7 +18,7 @@ public:
 	Pipe();
 	void add();
 	void view();
-	void change();
-	void download(ifstream& read, unordered_map<int, Pipe>& data_P);
+	void change(int id);
+	void download(ifstream& read);
 	void save(ofstream& out, int id);
 }; 

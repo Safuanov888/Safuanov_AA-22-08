@@ -21,6 +21,12 @@ void KS::add() {
 	num_department = get_int();
 	cout << "Введите количество работающих цехов: ";
 	work_department = get_int();
+	while (work_department > num_department) {
+		cin.clear();
+		cin.ignore(1000, '\n');
+		cout << "Данные введены неверно, попробуйте ещё раз: ";
+		work_department = get_int();
+	}
 	cout << "Введите его эффективность: ";
 	efficiency = get_double();
 }
@@ -39,19 +45,15 @@ void KS::view() {
 	}
 }
 
-void KS::change() {
-	if (name.empty()) {	// проверка на наличие КС
-		cout << "Вы не ввели КС\n";
-	}
-	else {
-		cout << "Сколько цехов задействовано в работе: ";
-		cin >> efficiency;
-		while (cin.fail() || cin.peek() != '\n' || efficiency < 0 || work_department > num_department) {
-			cin.clear();
-			cin.ignore(1000, '\n');
-			cout << "Данные введены неверно, попробуйте ещё раз: ";
-			cin >> efficiency;
-		}
+void KS::change(int id, int num_department) {
+	cout << "Меняется КС с id " << id << endl;
+	cout << "Сколько цехов задействовано в работе: ";
+	work_department = get_int();
+	while (work_department > num_department) {
+		cin.clear();
+		cin.ignore(1000, '\n');
+		cout << "Данные введены неверно, попробуйте ещё раз: ";
+		work_department = get_int();
 	}
 }
 
@@ -70,7 +72,7 @@ void KS::save(ofstream& out, int id) {
 	}
 }
 
-void KS::download(ifstream& read, unordered_map<int, KS>& data_KS) {
+void KS::download(ifstream& read) {
 	if (read.is_open()) {
 		read >> id;
 		read >> name;

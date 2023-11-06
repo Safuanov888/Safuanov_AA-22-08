@@ -44,20 +44,10 @@ void Pipe::view() {
 	}
 }
 
-void Pipe::change() {
-	if (name.empty()) {        // проверка на наличие трубы
-		cout << "Вы не ввели трубу\n";
-	}
-	else {
-		cout << "Работает труба или нет(0 - не работает, 1 - работает): ";
-		cin >> maintenance;
-		while (cin.fail() || cin.peek() != '\n') {
-			cin.clear();
-			cin.ignore(1000, '\n');
-			cout << "Данные введены неверно, попробуйте ещё раз: ";
-			cin >> maintenance;
-		}
-	}
+void Pipe::change(int id) {
+	cout << "Меняется труба с id " << id << endl;
+	cout << "Работает труба или нет(0 - не работает, 1 - работает): ";
+	bool maintenance = get_bool();
 }
 
 void Pipe::save(ofstream& out, int id) {
@@ -75,7 +65,7 @@ void Pipe::save(ofstream& out, int id) {
 	}
 }
 
-void Pipe::download(ifstream& read, unordered_map<int, Pipe>& data_P) {
+void Pipe::download(ifstream& read) {
 	if (read.is_open()) {
 		read >> id;
 		read >> name;
