@@ -64,6 +64,51 @@ bool filter_by_non_working(const KS& mas, int non_working) {
 	return mas.num_department - mas.work_department == mas.num_department * non_working / 100;
 }
 
+/*vector<int> filter_str(const unordered_map<int, T>& mas, string value) {
+	vector<int> g;
+	for (auto const& f : mas) {
+		T obj;
+		int id;
+		obj = f.second;
+		id = f.first;
+		if (obj.name == value) {
+			g.push_back(id);
+		}
+	}
+	return g;
+}
+
+vector<int> filter_bool(const unordered_map<int, Pipe>& mas, bool value) {
+	vector<int> g;
+	for (auto const& f : mas) {
+		Pipe obj;
+		int id;
+		obj = f.second;
+		id = f.first;
+		if (obj.maintenance == value) {
+			g.push_back(id);
+		}
+	}
+	return g;
+}
+
+vector<int> filter_double(const unordered_map<int, KS>& mas, double value) {
+	vector<int> g;
+	for (auto const& f : mas) {
+		KS obj;
+		int id;
+		double percent;
+		obj = f.second;
+		id = f.first;
+		percent = 100 * ((double)(obj.num_department - obj.work_department) / (double)obj.num_department);
+		if (percent == value) {
+			g.push_back(id);
+		}
+	}
+	return g;
+}
+*/
+
 template <typename T1, typename T2>
 unordered_set<int> find_by_filter(const unordered_map<int, T1>& mas, filter<T1, T2> f, T2 par) {
 	unordered_set<int> ids;
