@@ -21,7 +21,7 @@
     <ClCompile Include="pipe.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="get.h">
+    <ClCompile Include="get.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="KS.cpp">

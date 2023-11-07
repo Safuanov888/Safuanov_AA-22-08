@@ -129,7 +129,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="get.h" />
+    <ClCompile Include="get.cpp" />
     <ClCompile Include="KS.cpp" />
     <ClCompile Include="pipe.cpp" />
     <ClCompile Include="tubes.cpp" />

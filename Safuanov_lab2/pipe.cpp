@@ -1,28 +1,28 @@
-#include "pipe.h"
-#include "get.h"
-#include <fstream>
 #include <iostream>
-#include <unordered_map>
+#include <fstream>
+
+#include "pipe.h"
+#include "get.cpp"
 
 using namespace std;
 
-int Pipe::Nextid = 1;
+int Pipe::Nextid = -1;
 
 Pipe::Pipe()
 {
 	this->id = Nextid;
-	Nextid += 2;
+	Nextid -= 1;
 }
 
 void Pipe::add() {
 	cout << "Введите название трубы: ";
 	name = get_str();
 	cout << "Введите длину трубы: ";
-	length = get_int();
+	length = get_correct_value(0, INT_MAX);
 	cout << "Введите диаметр трубы: ";
-	diameter = get_int();
+	diameter = get_correct_value(0, INT_MAX);
 	cout << "Подлежит ли она ремонту?: ";
-	maintenance = get_bool();
+	maintenance = get_correct_value(0, 1);
 }
 
 void Pipe::view() {
@@ -45,20 +45,20 @@ void Pipe::view() {
 }
 
 void Pipe::change(int id) {
-	cout << "Меняется труба с id " << id << endl;
+	cout << "Меняется труба с id " << id << '\n';
 	cout << "Работает труба или нет(0 - не работает, 1 - работает): ";
-	bool maintenance = get_bool();
+	bool maintenance = get_correct_value(0, 1);
 }
 
 void Pipe::save(ofstream& out, int id) {
 	if (out.is_open()) {
-		out << "pipe" << endl;
-		out << id << endl;
-		out << name << endl;
-		out << length << endl;
-		out << diameter << endl;
-		out << maintenance << endl;
-		cout << "Данные трубы " << id << " загружены в файл." << endl;
+		out << "pipe" << '\n';
+		out << id << '\n';
+		out << name << '\n';
+		out << length << '\n';
+		out << diameter << '\n';
+		out << maintenance << '\n';
+		cout << "Данные трубы " << id << " загружены в файл." << '\n';
 	}
 	else {
 		cout << "Ошибка!";
