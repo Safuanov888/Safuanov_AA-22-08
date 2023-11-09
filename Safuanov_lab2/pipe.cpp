@@ -18,11 +18,11 @@ void Pipe::add() {
 	cout << "Введите название трубы: ";
 	name = get_str();
 	cout << "Введите длину трубы: ";
-	length = get_correct_value(0, INT_MAX);
+	length = get_correct_value<int>(0, INT_MAX);
 	cout << "Введите диаметр трубы: ";
-	diameter = get_correct_value(0, INT_MAX);
+	diameter = get_correct_value<int>(0, INT_MAX);
 	cout << "Подлежит ли она ремонту?: ";
-	maintenance = get_correct_value(0, 1);
+	maintenance = get_correct_value<bool>(0, 1);
 }
 
 void Pipe::view() {

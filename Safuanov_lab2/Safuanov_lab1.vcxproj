@@ -131,6 +131,7 @@
   <ItemGroup>
     <ClCompile Include="get.cpp" />
     <ClCompile Include="KS.cpp" />
+    <ClCompile Include="logging.h" />
     <ClCompile Include="pipe.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
