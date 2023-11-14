@@ -23,8 +23,8 @@ T get_correct_value(T min, T max) {
 		cin.clear();
 		cin.ignore(1000, '\n');
 		cout << "Данные введены неверно, попробуйте ещё раз: ";
-		cerr << value << '\n';
 		cin >> value;
+		cerr << value << '\n';
 	}
 	return value;
 }

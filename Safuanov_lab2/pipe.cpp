@@ -28,7 +28,7 @@ void Pipe::add() {
 void Pipe::view() {
 	if (!name.empty()) {
 		cout << "					    Труба                                                                 " << '\n';
-		cout << getid() << endl;
+		cout << id << endl;
 		cout << "Название трубы - " << name << '\n';
 		cout << "Длина трубы - " << length << '\n';
 		cout << "Диаметр трубы - " << diameter << '\n';

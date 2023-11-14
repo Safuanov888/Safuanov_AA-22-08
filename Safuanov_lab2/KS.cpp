@@ -18,11 +18,11 @@ void KS::add() {
 	cout << "Введите название станции: ";
 	name = get_str();
 	cout << "Введите количество цехов: ";
-	num_department = get_correct_value(0, INT_MAX);
+	num_department = get_correct_value<int>(0, INT_MAX);
 	cout << "Введите количество работающих цехов: ";
-	work_department = get_correct_value(0, num_department);
+	work_department = get_correct_value<int>(0, num_department);
 	cout << "Введите его эффективность: ";
-	efficiency = get_correct_value(0.0, DBL_MAX);
+	efficiency = get_correct_value<double>(0.0, DBL_MAX);
 }
 
 void KS::view() {
@@ -39,13 +39,13 @@ void KS::view() {
 	}
 }
 
-void KS::change(int id, int num_department) {
+void KS::change() {
 	cout << "Меняется КС с id " << id << '\n';
 	cout << "Сколько цехов задействовано в работе: ";
 	work_department = get_correct_value(0, num_department);
 }
 
-void KS::save(ofstream& out, int id) {
+void KS::save(ofstream& out) {
 	if (out.is_open()) {
 		out << "comp"<< '\n';
 		out << id << '\n';

@@ -35,7 +35,7 @@ vector<int> get_ids(const unordered_map<int, T>& mas)
 	unordered_set<int> ids;
 	cout << "Введите id; если закончили, то -1" << '\n';
 	while (1) {
-		int id = get_correct_value(0, INT_MAX);
+		int id = get_correct_value(-1, INT_MAX);
 		if (id == -1) {
 			break;
 		}
@@ -82,8 +82,7 @@ unordered_set<int> find_by_filter(const unordered_map<int, T1>& mas, filter<T1, 
 template <typename M>
 void view_data(unordered_map<int, M>& mas) {
 	for (auto const& pair : mas) {
-		M value;
-		value = pair.second;
+		M value = pair.second;
 		value.view();
 	}
 }
@@ -92,8 +91,7 @@ template <typename F>
 void view_id(unordered_map<int, F>& mas, int id) {
 	for (auto const& pair : mas) {
 		if (id == pair.first) {
-			F value;
-			value = pair.second;
+			F value = pair.second;
 			value.view();
 		}
 	}
@@ -133,18 +131,15 @@ int main() {
 		case 3:
 		{
 			cout << "1 - посмотреть все объекты, 0 - отфильтровать информацию: ";
-			bool choice1 = get_correct_value(0, 1);
-			if (choice1) {
+			if (bool choice1 = get_correct_value(0, 1)) {
 				view_data(data_P);
 				view_data(data_KS);
 			}
 			else {
 				cout << "1 - Трубу, 0 - КС: ";
-				bool choice2 = get_correct_value(0, 1);
-				if (choice2) {
+				if (bool choice2 = get_correct_value(0, 1)) {
 					cout << "1 - по названию, 0 - по ремонту: ";
-					bool choice3 = get_correct_value(0, 1);
-					if (choice3) {
+					if (bool choice3 = get_correct_value(0, 1)) {
 						cout << "Введите название: ";
 						string name = get_str();
 						for (int i : find_by_filter(data_P, filter_by_name, name)) {
@@ -161,8 +156,7 @@ int main() {
 				}
 				else {
 					cout << "1 - по названию, 0 - по проценту незадействованных цехов: ";
-					string choice4 = get_str();
-					if (choice4 == "1") {
+					if (bool choice4 = get_correct_value(0, 1)) {
 						cout << "Введите название: ";
 						string name = get_str();
 						for (int i : find_by_filter(data_KS, filter_by_name, name)) {
@@ -188,52 +182,51 @@ int main() {
 				vector<int> ids;
 				cout << "Введите название трубы: ";
 				string name = get_str();
-				if (choice1) {
-					for (auto [first, second] : data_P) {
-						if (second.name == name) {
-							data_P.erase(first);
-						}
-					}
+				unordered_set<int> set = find_by_filter(data_P, filter_by_name, name);
+				if (set.size() == 0) {
+					cout << "Такого имени нет";
 				}
 				else {
-					cout << "1 - поменять все трубы, 0 - на ваш выбор: ";
-					bool choice2 = get_correct_value(0, 1);
-					if (!choice2) {
-						ids = get_ids(data_P);
-						for (int id : ids) {
-							data_P[id].change();
-						}
-					}
-					else {
-						cout << "Работает труба или нет(0 - не работает, 1 - работает): ";
-						bool maintenance = get_correct_value(0, 1);
-						for (auto [first, second] : data_P) {
-							if (second.name == name) {
-								data_P[first].maintenance = maintenance;
+					if (choice1) {
+						cout << "1 - удалить все трубы, 0 - на ваш выбор: ";
+						bool choice2 = get_correct_value(0, 1);
+						if (!choice2) {
+							cout << "Можете выбирать из данного набора id" << '\n';
+							for (const auto& id : set) {
+								cout << id << '\n';
 							}
-						}
-					}
-				}
-				/*vector<int> ids;
-				while (1) {
-					ids = get_ids(data_P);
-					if (ids.empty()) {
-						cout << "Вы не выбрали id" << '\n';
-					}
-					else {
-						if (choice) {
+							ids = get_ids(data_P);
 							for (int id : ids) {
 								data_P.erase(id);
 							}
 						}
 						else {
+							for (int id : set) {
+								data_P.erase(id);
+							}
+						}
+					}
+					else {
+						cout << "1 - поменять все трубы, 0 - на ваш выбор: ";
+						bool choice3 = get_correct_value(0, 1);
+						if (!choice3) {
+							cout << "Можете выбирать из данного набора id" << '\n';
+							for (const auto& id : set) {
+								cout << id << '\n';
+							}
+							ids = get_ids(data_P);
 							for (int id : ids) {
 								data_P[id].change();
 							}
 						}
+						else {
+							cout << "Работает труба или нет(0 - не работает, 1 - работает): ";
+							for (int id : set) {
+								data_P[id].change();
+							}
+						}
 					}
-					break;
-				}*/
+				}
 			}
 			else {
 				cout << "Нет труб для изменений" << '\n';
@@ -244,28 +237,22 @@ int main() {
 		{
 			if (!data_KS.empty()) {
 				cout << "1 - удаление, 0 - изменение КС: ";
-				string choice = get_str();
-				vector<int> ids;
-				while (1) {
-					ids = get_ids(data_KS);
-					if (ids.empty()) {
-						cout << "Вы не выбрали id" << '\n';
-					}
-					else {
-						if (choice == "1") {
-							for (int id : ids) {
-								data_KS.erase(id);
-							}
+				bool choice = get_correct_value(0, 1);
+				cout << "Введите название КС: ";
+				string name = get_str();
+				unordered_set<int> set = find_by_filter(data_KS, filter_by_name, name);
+				if (set.size() == 0) {
+					cout << "Такого имени нет";
+				}
+				else {
+					for (int id : set) {
+						if (choice) {
+							data_KS.erase(id);
 						}
 						else {
-							for (int id : ids) {
-								KS ks;
-								ks.change(id, data_KS[id].num_department);
-								data_KS[id].work_department = ks.work_department;
-							}
+							data_KS[id].change();
 						}
 					}
-					break;
 				}
 			}
 			else {
@@ -276,31 +263,22 @@ int main() {
 		case 6:
 		{
 			cout << "Введите название файла для записи: ";
-			string in_file = get_str() + ".txt";
+			string in_file = get_str();
 			ofstream out(in_file);
 			if (data_P.empty()) {
 				cout << "Нет труб" << '\n';
 			}
 			if (data_KS.empty()) {
 				cout << "Нет КС" << '\n';
-				break;
 			}
 			for (auto const& p : data_P) {
-				int pipe_id;
-				Pipe pipe_value;
-				pipe_value = p.second;
-				pipe_id = p.first;
-				if (!pipe_value.name.empty()) {
-					pipe_value.save(out);
+				if (!p.second.name.empty()) {
+					data_P[p.first].save(out);
 				}
 			}
 			for (auto const& k : data_KS) {
-				int ks_id;
-				KS ks_value;
-				ks_value = k.second;
-				ks_id = k.first;
-				if (!ks_value.name.empty()) {
-					ks_value.save(out, ks_id);
+				if (!k.second.name.empty()) {
+					data_KS[k.first].save(out);
 				}
 			}
 			break;

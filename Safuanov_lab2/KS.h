@@ -16,7 +16,7 @@ public:
 	KS();
 	void add();
 	void view();
-	void change(int id, int num_department);
+	void change();
 	void download(ifstream& read);
-	void save(ofstream& out, int id);
+	void save(ofstream& out);
 };
