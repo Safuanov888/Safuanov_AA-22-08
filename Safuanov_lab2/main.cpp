@@ -30,7 +30,7 @@ void menu() {
 }
 
 template <typename T>
-vector<int> get_ids(const unordered_map<int, T>& mas) 
+vector<int> get_ids(const unordered_map<int, T>& mas)
 {
 	unordered_set<int> ids;
 	cout << "Введите id; если закончили, то -1" << '\n';
@@ -133,18 +133,18 @@ int main() {
 		case 3:
 		{
 			cout << "1 - посмотреть все объекты, 0 - отфильтровать информацию: ";
-			string choice1 = get_str();
-			if (choice1 == "1") {
+			bool choice1 = get_correct_value(0, 1);
+			if (choice1) {
 				view_data(data_P);
 				view_data(data_KS);
 			}
 			else {
 				cout << "1 - Трубу, 0 - КС: ";
-				string choice2 = get_str();
-				if (choice2 == "1") {
+				bool choice2 = get_correct_value(0, 1);
+				if (choice2) {
 					cout << "1 - по названию, 0 - по ремонту: ";
-					string choice3 = get_str();
-					if (choice3 == "1") {
+					bool choice3 = get_correct_value(0, 1);
+					if (choice3) {
 						cout << "Введите название: ";
 						string name = get_str();
 						for (int i : find_by_filter(data_P, filter_by_name, name)) {
@@ -184,29 +184,59 @@ int main() {
 		{
 			if (!data_P.empty()) {
 				cout << "1 - удаление, 0 - изменение труб: ";
-				string choice = get_str();
+				bool choice1 = get_correct_value(0, 1);
 				vector<int> ids;
+				cout << "Введите название трубы: ";
+				string name = get_str();
+				if (choice1) {
+					for (auto [first, second] : data_P) {
+						if (second.name == name) {
+							data_P.erase(first);
+						}
+					}
+				}
+				else {
+					cout << "1 - поменять все трубы, 0 - на ваш выбор: ";
+					bool choice2 = get_correct_value(0, 1);
+					if (!choice2) {
+						ids = get_ids(data_P);
+						for (int id : ids) {
+							data_P[id].change();
+						}
+					}
+					else {
+						cout << "Работает труба или нет(0 - не работает, 1 - работает): ";
+						bool maintenance = get_correct_value(0, 1);
+						for (auto [first, second] : data_P) {
+							if (second.name == name) {
+								data_P[first].maintenance = maintenance;
+							}
+						}
+					}
+				}
+				/*vector<int> ids;
 				while (1) {
 					ids = get_ids(data_P);
 					if (ids.empty()) {
 						cout << "Вы не выбрали id" << '\n';
 					}
 					else {
-						if (choice == "1") {
+						if (choice) {
 							for (int id : ids) {
 								data_P.erase(id);
 							}
 						}
 						else {
 							for (int id : ids) {
-								Pipe p;
-								p.change(id);
-								data_P[id].maintenance = p.maintenance;
+								data_P[id].change();
 							}
 						}
 					}
 					break;
-				}
+				}*/
+			}
+			else {
+				cout << "Нет труб для изменений" << '\n';
 			}
 			break;
 		}
@@ -238,6 +268,9 @@ int main() {
 					break;
 				}
 			}
+			else {
+				cout << "Нет КС для изменений" << '\n';
+			}
 			break;
 		}
 		case 6:
@@ -245,26 +278,29 @@ int main() {
 			cout << "Введите название файла для записи: ";
 			string in_file = get_str() + ".txt";
 			ofstream out(in_file);
+			if (data_P.empty()) {
+				cout << "Нет труб" << '\n';
+			}
+			if (data_KS.empty()) {
+				cout << "Нет КС" << '\n';
+				break;
+			}
 			for (auto const& p : data_P) {
-				{
-					int pipe_id;
-					Pipe pipe_value;
-					pipe_value = p.second;
-					pipe_id = p.first;
-					if (!pipe_value.name.empty()) {
-						pipe_value.save(out, pipe_id);
-					}
+				int pipe_id;
+				Pipe pipe_value;
+				pipe_value = p.second;
+				pipe_id = p.first;
+				if (!pipe_value.name.empty()) {
+					pipe_value.save(out);
 				}
 			}
 			for (auto const& k : data_KS) {
-				{
-					int ks_id;
-					KS ks_value;
-					ks_value = k.second;
-					ks_id = k.first;
-					if (!ks_value.name.empty()) {
-						ks_value.save(out, ks_id);
-					}
+				int ks_id;
+				KS ks_value;
+				ks_value = k.second;
+				ks_id = k.first;
+				if (!ks_value.name.empty()) {
+					ks_value.save(out, ks_id);
 				}
 			}
 			break;

@@ -17,12 +17,14 @@ inline string get_str() {
 template <typename T> 
 T get_correct_value(T min, T max) {
 	T value;
+	cin >> value;
 	cerr << value << '\n';
-	while ((cin >> value).fail() || cin.peek() != '\n' || value < min || value > max) {
+	while (cin.fail() || cin.peek() != '\n' || value < min || value > max) {
 		cin.clear();
 		cin.ignore(1000, '\n');
 		cout << "Данные введены неверно, попробуйте ещё раз: ";
 		cerr << value << '\n';
+		cin >> value;
 	}
 	return value;
 }

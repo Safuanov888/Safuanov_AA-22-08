@@ -16,7 +16,7 @@ public:
 	Pipe();
 	void add();
 	void view();
-	void change(int id);
+	void change();
 	void download(ifstream& read);
-	void save(ofstream& out, int id);
+	void save(ofstream& out);
 }; 

@@ -6,21 +6,21 @@
 
 using namespace std;
 
-int Pipe::Nextid = -1;
+int Pipe::Nextid = 1;
 
 Pipe::Pipe()
 {
 	this->id = Nextid;
-	Nextid -= 1;
+	Nextid += 1;
 }
 
 void Pipe::add() {
 	cout << "Введите название трубы: ";
 	name = get_str();
 	cout << "Введите длину трубы: ";
-	length = get_correct_value<int>(0, INT_MAX);
+	length = get_correct_value<int>(1, INT_MAX);
 	cout << "Введите диаметр трубы: ";
-	diameter = get_correct_value<int>(0, INT_MAX);
+	diameter = get_correct_value<int>(1, INT_MAX);
 	cout << "Подлежит ли она ремонту?: ";
 	maintenance = get_correct_value<bool>(0, 1);
 }
@@ -44,13 +44,13 @@ void Pipe::view() {
 	}
 }
 
-void Pipe::change(int id) {
+void Pipe::change() {
 	cout << "Меняется труба с id " << id << '\n';
 	cout << "Работает труба или нет(0 - не работает, 1 - работает): ";
-	bool maintenance = get_correct_value(0, 1);
+	maintenance = get_correct_value(0, 1);
 }
 
-void Pipe::save(ofstream& out, int id) {
+void Pipe::save(ofstream& out) {
 	if (out.is_open()) {
 		out << "pipe" << '\n';
 		out << id << '\n';
