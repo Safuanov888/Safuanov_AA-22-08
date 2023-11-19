@@ -8,10 +8,10 @@
 #include <unordered_map>  // структуры данных
 #include <unordered_set>
 
+#include "samples.h"
 #include "pipe.h"
 #include "KS.h"
 #include "logging.h"
-#include "get.cpp"
 
 
 using namespace std;
@@ -29,72 +29,12 @@ void menu() {
 	cout << "0. Выход" << '\n' << '\n';
 }
 
-template <typename T>
-vector<int> get_ids(const unordered_map<int, T>& mas)
-{
-	unordered_set<int> ids;
-	cout << "Введите id; если закончили, то -1" << '\n';
-	while (1) {
-		int id = get_correct_value(-1, INT_MAX);
-		if (id == -1) {
-			break;
-		}
-		else if (mas.contains(id)) {
-			ids.insert(id);
-		}
-		else {
-			cout << "Нет объекта с этим id" << '\n';;
-		}
-		if (ids.size() == mas.size()) {
-			break;
-		}
-	}
-	return vector<int>(ids.begin(), ids.end());
+bool filter_by_status(const Pipe& dict, bool status) {
+	return dict.maintenance == status;
 }
 
-template<typename T1, typename T2>
-using filter = bool(*)(const T1& mas, T2 param);
-
-template<typename T>
-bool filter_by_name(const T& mas, string name) {
-	return mas.name.find(name) != string::npos;
-}
-
-bool filter_by_status(const Pipe& mas, bool status) {
-	return mas.maintenance == status;
-}
-
-bool filter_by_non_working(const KS& mas, int non_working) {
-	return mas.num_department - mas.work_department == mas.num_department * non_working / 100;
-}
-
-template <typename T1, typename T2>
-unordered_set<int> find_by_filter(const unordered_map<int, T1>& mas, filter<T1, T2> f, T2 par) {
-	unordered_set<int> ids;
-	for (auto& pair : mas) {
-		if (f(pair.second, par)) {
-			ids.insert(pair.first);
-		}
-	}
-	return ids;
-}
-
-template <typename M>
-void view_data(unordered_map<int, M>& mas) {
-	for (auto const& pair : mas) {
-		M value = pair.second;
-		value.view();
-	}
-}
-
-template <typename F>
-void view_id(unordered_map<int, F>& mas, int id) {
-	for (auto const& pair : mas) {
-		if (id == pair.first) {
-			F value = pair.second;
-			value.view();
-		}
-	}
+bool filter_by_non_working(const KS& dict, int non_working) {
+	return dict.num_department - dict.work_department == dict.num_department * non_working / 100;
 }
 
 int main() {
@@ -116,16 +56,12 @@ int main() {
 		switch (choice) {
 		case 1:
 		{
-			Pipe obj_pipe;
-			obj_pipe.add();
-			data_P.insert({ obj_pipe.getid(), obj_pipe });
+			add_to_dict(data_P);
 			break;
 		}
 		case 2:
 		{
-			KS obj_comp_station;
-			obj_comp_station.add();
-			data_KS.insert({ obj_comp_station.getid(), obj_comp_station });
+			add_to_dict(data_KS);
 			break;
 		}
 		case 3:

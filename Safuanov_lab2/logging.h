@@ -5,10 +5,10 @@ using namespace std;
 
 class redirect_output_wrapper
 {
-	std::ostream& stream;
-	std::streambuf* const old_buf;
+	ostream& stream;
+	streambuf* const old_buf;
 public:
-	redirect_output_wrapper(std::ostream& src)
+	redirect_output_wrapper(ostream& src)
 		:old_buf(src.rdbuf()), stream(src)
 	{
 	}
@@ -16,7 +16,7 @@ public:
 	~redirect_output_wrapper() {
 		stream.rdbuf(old_buf);
 	}
-	void redirect(std::ostream& dest)
+	void redirect(ostream& dest)
 	{
 		stream.rdbuf(dest.rdbuf());
 	}

@@ -21,13 +21,16 @@
     <ClCompile Include="pipe.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="get.cpp">
+    <ClCompile Include="get.h">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="KS.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="logging.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClCompile>
+    <ClCompile Include="samples.h">
       <Filter>Файлы заголовков</Filter>
     </ClCompile>
   </ItemGroup>

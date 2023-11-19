@@ -2,7 +2,7 @@
 #include <fstream>
 
 #include "pipe.h"
-#include "get.cpp"
+#include "samples.h"
 
 using namespace std;
 

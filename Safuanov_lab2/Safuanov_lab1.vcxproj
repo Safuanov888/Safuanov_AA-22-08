@@ -129,11 +129,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="get.cpp" />
+    <ClCompile Include="get.h" />
     <ClCompile Include="KS.cpp" />
     <ClCompile Include="logging.h" />
     <ClCompile Include="pipe.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="samples.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="KS.h" />
