@@ -5,6 +5,7 @@ using namespace std;
 
 class KS
 {
+private:
 	int id;
 	static int Nextid;
 public:

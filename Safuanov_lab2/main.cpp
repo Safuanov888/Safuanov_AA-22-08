@@ -8,7 +8,8 @@
 #include <unordered_map>  // структуры данных
 #include <unordered_set>
 
-#include "samples.h"
+#include "network.h"
+#include "samples_and_utils.h"
 #include "pipe.h"
 #include "KS.h"
 #include "logging.h"
@@ -18,7 +19,7 @@ using namespace std;
 using namespace chrono;
 
 void menu() {
-	cout << "					    Введите необходимую вам цифру                                               " << '\n';
+	cout << "					    Введите необходимую вам быбу(хаха, я тебя взломал)                                   " << '\n';
 	cout << "1. Добавить трубу" << '\n';
 	cout << "2. Добавить КС" << '\n';
 	cout << "3. Просмотр объектов" << '\n';
@@ -26,6 +27,7 @@ void menu() {
 	cout << "5. Редактировать КС" << '\n';
 	cout << "6. Сохранить" << '\n';
 	cout << "7. Загрузить" << '\n';
+	cout << "8. Связать трубы с КС в газотранспортную сеть" << '\n';
 	cout << "0. Выход" << '\n' << '\n';
 }
 
@@ -52,8 +54,9 @@ int main() {
 		menu();  // вызываем меню
 		cout << "Кнопка: ";
 		cin.clear();
-		int choice = get_correct_value(0, 7);
-		switch (choice) {
+		int choice = get_correct_value(0, 8);
+		switch (choice) 
+		{
 		case 1:
 		{
 			add_to_dict(data_P);
@@ -244,6 +247,12 @@ int main() {
 					}
 				}
 			}
+			break;
+		}
+		case 8:
+		{
+			Network network;
+			network.ConnectionPipes(data_P, data_KS);
 			break;
 		}
 		case 0:

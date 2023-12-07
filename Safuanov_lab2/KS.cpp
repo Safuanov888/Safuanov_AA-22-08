@@ -2,7 +2,7 @@
 #include <fstream>
 
 #include "KS.h"
-#include "samples.h"
+#include "samples_and_utils.h"
 
 using namespace std;
 

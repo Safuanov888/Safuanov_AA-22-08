@@ -2,7 +2,7 @@
 #include <fstream>
 
 #include "pipe.h"
-#include "samples.h"
+#include "samples_and_utils.h"
 
 using namespace std;
 
@@ -19,10 +19,11 @@ void Pipe::add() {
 	name = get_str();
 	cout << "Введите длину трубы: ";
 	length = get_correct_value<int>(1, INT_MAX);
-	cout << "Введите диаметр трубы: ";
-	diameter = get_correct_value<int>(1, INT_MAX);
+	diameter = get_diameter();
 	cout << "Подлежит ли она ремонту?: ";
 	maintenance = get_correct_value<bool>(0, 1);
+	id_of_entrance = 0;
+	id_of_exit = 0;
 }
 
 void Pipe::view() {
@@ -77,4 +78,9 @@ void Pipe::download(ifstream& read) {
 	else {
 		cout << "Ошибка!";
 	}
+}
+
+void Pipe::connection(int entrance, int exit) {
+	id_of_entrance = entrance;
+	id_of_exit = exit;
 }

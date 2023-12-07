@@ -4,7 +4,6 @@
 #include <string>
 
 #include "logging.h"
-#include "get.h"
 
 using namespace std;
 
@@ -88,4 +87,38 @@ void add_to_dict(unordered_map<int, T>& dict) {
 	T obj;
 	obj.add();
 	dict.insert({ obj.getid(), obj });
+}
+
+inline string get_str() {
+	string str;
+	cin >> ws;
+	getline(std::cin, str);
+	cerr << str << '\n';
+	return str;
+}
+
+inline int get_diameter() {
+	int diameter;
+	while (true) {
+		cout << "Выберите диаметр трубы из предложенного списка: 500, 700, 1000, 1400 мм: ";
+		if (!(cin >> diameter) || (diameter != 500 && diameter != 700 && diameter != 100 && diameter != 1400)) {
+			cout << "Неверный диаметр, введите заново" << '\n';
+			cin.clear();
+			cin.ignore(1000, '\n');
+		}
+		else {
+			break;
+		}
+	}
+	return diameter;
+}
+
+template <typename T>
+bool FindConnection(unordered_map<int, T> dict, int diameter) {
+	for (auto pair : dict) {
+		if (pair.second.diameter == diameter && pair.second.take_id_of_entrance() == 0 && pair.second.take_id_of_exit() == 0) {
+			return true;
+		}
+	}
+	return false;
 }
