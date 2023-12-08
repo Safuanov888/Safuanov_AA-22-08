@@ -1,6 +1,6 @@
 #include <iostream>
 #include <unordered_map>
-#include "samples_and_utils.h"
+#include "utils_and_samples.h"
 #include "network.h"
 
 using namespace std;
@@ -24,12 +24,12 @@ void Network::ConnectionPipes(unordered_map<int, Pipe>& data_P, unordered_map<in
 				}
 				break;
 			}
-			cout << "Труба с таким диаметром не найдена, создайте новую";
+			cout << "Труба с таким диаметром не найдена, создайте новую" << '\n';
 			add_to_dict(data_P);
 		}
 		cout << "Труба с диаметром " << diameter << " успешно соединена с КС" << '\n';
 	}
 	else {
-		cout << "Невозможно связать трубы с КС";
+		cout << "Невозможно связать трубы с КС" << '\n';
 	}
 }

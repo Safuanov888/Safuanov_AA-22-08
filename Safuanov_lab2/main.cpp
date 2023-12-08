@@ -9,7 +9,8 @@
 #include <unordered_set>
 
 #include "network.h"
-#include "samples_and_utils.h"
+#include "graph.h"
+#include "utils_and_samples.h"
 #include "pipe.h"
 #include "KS.h"
 #include "logging.h"
@@ -19,7 +20,7 @@ using namespace std;
 using namespace chrono;
 
 void menu() {
-	cout << "					    Введите необходимую вам быбу(хаха, я тебя взломал)                                   " << '\n';
+	cout << "					    Введите необходимую вам букву                                   " << '\n';
 	cout << "1. Добавить трубу" << '\n';
 	cout << "2. Добавить КС" << '\n';
 	cout << "3. Просмотр объектов" << '\n';
@@ -28,6 +29,7 @@ void menu() {
 	cout << "6. Сохранить" << '\n';
 	cout << "7. Загрузить" << '\n';
 	cout << "8. Связать трубы с КС в газотранспортную сеть" << '\n';
+	cout << "9. Топологическая сортировка газотранспортной сети" << '\n';
 	cout << "0. Выход" << '\n' << '\n';
 }
 
@@ -54,7 +56,7 @@ int main() {
 		menu();  // вызываем меню
 		cout << "Кнопка: ";
 		cin.clear();
-		int choice = get_correct_value(0, 8);
+		int choice = get_correct_value(0, 9);
 		switch (choice) 
 		{
 		case 1:
@@ -253,6 +255,22 @@ int main() {
 		{
 			Network network;
 			network.ConnectionPipes(data_P, data_KS);
+			break;
+		}
+		case 9:
+		{
+			GraphStructure gas_network = CreateGraph(data_P, data_KS);
+			vector<int> sorting_nodes = TopologicalSorting(gas_network);
+			if (sorting_nodes.size() != 0) {
+				cout << "Топологическая сортировка выполнена: ";
+				for (int node : sorting_nodes) {
+					cout << node << " ";
+				} 
+				cout << '\n';
+			}
+			else {
+				cout << "Невозможно выполнить топологическую сортировку" << '\n';
+			}
 			break;
 		}
 		case 0:

@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <unordered_set>
 #include <unordered_map>
@@ -101,7 +102,7 @@ inline int get_diameter() {
 	int diameter;
 	while (true) {
 		cout << "Выберите диаметр трубы из предложенного списка: 500, 700, 1000, 1400 мм: ";
-		if (!(cin >> diameter) || (diameter != 500 && diameter != 700 && diameter != 100 && diameter != 1400)) {
+		if (!(cin >> diameter) || (diameter != 500 && diameter != 700 && diameter != 1000 && diameter != 1400)) {
 			cout << "Неверный диаметр, введите заново" << '\n';
 			cin.clear();
 			cin.ignore(1000, '\n');
