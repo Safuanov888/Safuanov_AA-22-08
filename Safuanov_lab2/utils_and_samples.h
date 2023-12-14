@@ -49,6 +49,7 @@ vector<int> get_ids(const unordered_map<int, T>& dict)
 template<typename T1, typename T2>
 using filter = bool(*)(const T1& dict, T2 param);
 
+
 template<typename T>
 bool filter_by_name(const T& dict, string name) {
 	return dict.name.find(name) != string::npos;
@@ -81,13 +82,6 @@ void view_id(unordered_map<int, F>& dict, int id) {
 			value.view();
 		}
 	}
-}
-
-template <typename T>
-void add_to_dict(unordered_map<int, T>& dict) {
-	T obj;
-	obj.add();
-	dict.insert({ obj.getid(), obj });
 }
 
 inline string get_str() {
@@ -123,3 +117,4 @@ bool FindConnection(unordered_map<int, T> dict, int diameter) {
 	}
 	return false;
 }
+

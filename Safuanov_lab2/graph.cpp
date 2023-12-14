@@ -1,29 +1,18 @@
-#include <iostream>
-#include "utils_and_samples.h"
-#include "network.h"
+#include "pipe.h"
+#include "KS.h"
 #include "graph.h"
 
 void GraphStructure::add(int entrance, int exit) {
 	graph_list[entrance].insert(exit);
 }
 
-GraphStructure CreateGraph(unordered_map<int, Pipe>& data_P, unordered_map<int, KS>& data_KS) {
+GraphStructure CreateGraph(unordered_map<int, Pipe> data_P, unordered_map<int, KS> data_KS) {
 	GraphStructure graph;
 	if (data_KS.size() != 0) {
-		// добавляем все вершины в виде КС 
-		for (auto pair : data_KS) {
-			graph.add(pair.first, 0);
-		}
-		// добавляем рёбра в виде труб
+		// добавляем вершины графа
 		for (auto pair : data_P) {
 			if (pair.second.take_id_of_entrance() != 0 && pair.second.take_id_of_exit() != 0) {
 				graph.add(pair.second.take_id_of_entrance(), pair.second.take_id_of_exit());
-			}
-		}
-		for (auto pair : graph.graph_list) {
-			cout << pair.first << "      ";
-			for (int value : pair.second) {
-				cout << value << " ";
 			}
 		}
 	}
@@ -48,21 +37,21 @@ vector<int> TopologicalSorting(GraphStructure& graph) {
 	unordered_map<int, bool> visited;
 	vector<int> sorted;
 	// Инициализация всех вершин как не посещенных
-	for (auto pair : graph.graph_list) {
+	for (auto& pair : graph.graph_list) {
 		visited[pair.first] = false;
 	}
 
 	// Обход графа в глубину для каждой вершины
-	for (auto pair : graph.graph_list) {
+	for (auto& pair : graph.graph_list) {
 		if (!visited[pair.first]) {
 			DFS(graph, visited, pair.first, sorted);
 		}
 	}
 
 	// Формирование результата - упорядоченного списка вершин
-	/*vector<int> result;
+	vector<int> result;
 	for (int i = sorted.size() - 1; i >= 0; i--) {
 		result.push_back(sorted[i]);
-	}*/
-	return sorted;
+	}
+	return result;
 }

@@ -1,5 +1,4 @@
 #include <iostream>
-#include <fstream>
 
 #include "KS.h"
 #include "utils_and_samples.h"

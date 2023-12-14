@@ -59,6 +59,8 @@ void Pipe::save(ofstream& out) {
 		out << length << '\n';
 		out << diameter << '\n';
 		out << maintenance << '\n';
+		out << id_of_entrance << '\n';
+		out << id_of_exit << '\n';
 		cout << "Данные трубы " << id << " загружены в файл." << '\n';
 	}
 	else {
@@ -73,7 +75,8 @@ void Pipe::download(ifstream& read) {
 		read >> length;
 		read >> diameter;
 		read >> maintenance;
-
+		read >> id_of_entrance;
+		read >> id_of_exit;
 	}
 	else {
 		cout << "Ошибка!";
