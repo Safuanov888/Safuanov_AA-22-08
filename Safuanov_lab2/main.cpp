@@ -31,7 +31,7 @@ int main() {
 		PrintMenu();  // вызываем меню
 		cout << "Кнопка: ";
 		cin.clear();
-		int choice = get_correct_value(0, 9);
+		int choice = get_correct_value(0, 10);
 		switch (choice) 
 		{
 		case 1:
@@ -79,16 +79,31 @@ int main() {
 		case 9:
 		{
 			GraphStructure gas_network = CreateGraph(network.TakePipe(), network.TakeKS());
-			vector<int> sorting_nodes = TopologicalSorting(gas_network);
-			if (sorting_nodes.size() != 0) {
-				cout << "Топологическая сортировка выполнена: ";
-				for (int node : sorting_nodes) {
-					cout << node << " ";
-				} 
-				cout << '\n';
+			if (!CheckCicle(network.TakePipe(), network.TakeKS())) {
+				cout << "В графе образовался цикл, сортировка невозможна" << '\n';
 			}
 			else {
-				cout << "Невозможно выполнить топологическую сортировку" << '\n';
+				vector<int> sorting_nodes = TopologicalSorting(gas_network);
+				if (sorting_nodes.size() != 0) {
+					cout << "Топологическая сортировка выполнена: ";
+					for (int node : sorting_nodes) {
+						cout << node << " ";
+					}
+					cout << '\n';
+				}
+				else {
+					cout << "Невозможно выполнить топологическую сортировку" << '\n';
+				}
+			}
+			break;
+		}
+		case 10:
+		{
+			if (network.TakePipe().size() != 0 && network.TakeKS().size() != 0) {
+				ViewGraph(network.TakePipe(), network.TakeKS());
+			}
+			else {
+				cout << "Нет информации для просмотра";
 			}
 			break;
 		}

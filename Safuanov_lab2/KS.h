@@ -10,6 +10,7 @@ private:
 	static int Nextid;
 public:
 	inline int getid() const { return id; };
+	static void reset_next_id() { Nextid=0; };
 	string name;
 	int num_department;
 	int work_department;

@@ -12,3 +12,5 @@ public:
 };
 GraphStructure CreateGraph(unordered_map<int, Pipe> data_P, unordered_map<int, KS> data_KS);
 vector<int> TopologicalSorting(GraphStructure& graph);
+void ViewGraph(unordered_map<int, Pipe> data_P, unordered_map<int, KS> data_KS);
+bool CheckCicle(unordered_map<int, Pipe> data_P, unordered_map<int, KS> data_KS);

@@ -225,6 +225,10 @@ void Network::download() {
 		cout << "Файла не существует!\n";
 	}
 	else {
+		data_P.clear();
+		Pipe::reset_next_id();
+		data_KS.clear();
+		KS::reset_next_id();
 		string Name;
 		while (getline(read, Name)) {
 			if (Name == "pipe") {
