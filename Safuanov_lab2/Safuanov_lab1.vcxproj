@@ -129,16 +129,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="get.h" />
+    <ClCompile Include="graph.cpp" />
     <ClCompile Include="KS.cpp" />
     <ClCompile Include="logging.h" />
+    <ClCompile Include="network.cpp" />
     <ClCompile Include="pipe.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="samples.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="graph.h" />
     <ClInclude Include="KS.h" />
+    <ClInclude Include="menu.h" />
+    <ClInclude Include="network.h" />
     <ClInclude Include="pipe.h" />
+    <ClInclude Include="utils_and_samples.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

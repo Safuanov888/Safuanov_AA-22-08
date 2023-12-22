@@ -21,17 +21,17 @@
     <ClCompile Include="pipe.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="get.h">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="KS.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="logging.h">
       <Filter>Файлы заголовков</Filter>
     </ClCompile>
-    <ClCompile Include="samples.h">
-      <Filter>Файлы заголовков</Filter>
+    <ClCompile Include="network.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="graph.cpp">
+      <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -39,6 +39,18 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="KS.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="graph.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="menu.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="network.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="utils_and_samples.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

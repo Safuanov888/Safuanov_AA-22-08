@@ -13,7 +13,6 @@ bool filter_by_non_working(const KS& dict, int non_working) {
 	return dict.num_department - dict.work_department == dict.num_department * non_working / 100;
 }
 
-
 void Network::ConnectionPipes() {
 	if (data_P.size() != 0 && data_KS.size() != 0) {
 		int entrance_id, exit_id, diameter;

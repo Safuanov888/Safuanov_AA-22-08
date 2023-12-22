@@ -7,10 +7,11 @@ using namespace std;
 
 class GraphStructure {
 public:
-	unordered_map<int, unordered_set<int>> graph_list;
-	void add(int entrance, int exit);
+	unordered_map<int, unordered_map<int, pair<int, double>>> graph_list;
+	void add(int entrance, int exit, double weight, double capacity);
 };
 GraphStructure CreateGraph(unordered_map<int, Pipe> data_P, unordered_map<int, KS> data_KS);
 vector<int> TopologicalSorting(GraphStructure& graph);
 void ViewGraph(unordered_map<int, Pipe> data_P, unordered_map<int, KS> data_KS);
 bool CheckCicle(unordered_map<int, Pipe> data_P, unordered_map<int, KS> data_KS);
+double FordFulkerson(GraphStructure& graph, int entrance, int exit);

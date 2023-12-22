@@ -1,9 +1,11 @@
 #include "pipe.h"
 #include "KS.h"
 #include "graph.h"
+#include <math.h>
+#include "queue"
 
-void GraphStructure::add(int entrance, int exit) {
-	graph_list[entrance].insert(exit);
+void GraphStructure::add(int entrance, int exit, double weight, double capacity) {
+	graph_list[entrance][exit] = make_pair(weight, capacity);
 }
 
 vector<int> get_ids_of_ks(unordered_map<int, KS> data_KS) {
@@ -19,8 +21,18 @@ GraphStructure CreateGraph(unordered_map<int, Pipe> data_P, unordered_map<int, K
 	if (data_KS.size() != 0) {
 		// добавляем вершины графа
 		for (auto pair : data_P) {
+			double weight;
+			double capacity;
+			if (pair.second.maintenance == 0) {
+				weight = pair.second.length;
+				capacity = 10000 * sqrt(pow((double)pair.second.diameter / 1000, 5) / pair.second.length);
+			}
+			else {
+				weight = INFINITY;
+				capacity = 0;
+			}
 			if (pair.second.take_id_of_entrance() != 0 && pair.second.take_id_of_exit() != 0) {
-				graph.add(pair.second.take_id_of_entrance(), pair.second.take_id_of_exit());
+				graph.add(pair.second.take_id_of_entrance(), pair.second.take_id_of_exit(), weight, capacity);
 			}
 		}
 	}
@@ -33,12 +45,68 @@ GraphStructure CreateGraph(unordered_map<int, Pipe> data_P, unordered_map<int, K
 void DFS(GraphStructure& graph, unordered_map<int, bool>& visited, int node, vector<int>& sorted) {
 	visited[node] = true;
 
-	for (int neighbor : graph.graph_list[node]) {
+	for (const auto& [neighbor, param] : graph.graph_list[node]) {
 		if (!visited[neighbor]) {
 			DFS(graph, visited, neighbor, sorted);
 		}
 	}
 	sorted.push_back(node);
+}
+
+bool BFS(GraphStructure& graph, int entrance, int exit, vector<int>& parent) {
+	std::queue<int> q;
+	std::unordered_set<int> visited;
+	q.push(entrance);
+	visited.insert(entrance);
+	bool foundPath = false;
+
+	while (!q.empty()) {
+		int u = q.front();
+		q.pop();
+
+		for (const auto& [v, edge] : graph.graph_list[u]) {
+			double capacity = edge.second;
+			if (!visited.count(v) && capacity > 0) {
+				q.push(v);
+				parent[v-1] = u;
+				visited.insert(v);
+				if (v == exit) {
+					foundPath = true;
+					break;
+				}
+			}
+		}
+	}
+
+	return foundPath;
+}
+
+double FordFulkerson(GraphStructure& graph, int entrance, int exit) {
+	vector<int> parent(graph.graph_list.size() + 1, -1);
+	double max_flow = 0.0;
+
+	while (BFS(graph, entrance, exit, parent)) {
+		double path_flow = INFINITY;
+
+		// Нахождение минимального потока в пути
+		for (int id = exit; id != entrance; id = parent[id-1]) {
+			int entrance = parent[id-1];
+			path_flow = min(path_flow, graph.graph_list[entrance][id].second);
+		}
+		// Обновление потоков в сети
+		for (int id = exit; id != entrance; id = parent[id-1]) {
+			int entrance = parent[id-1];
+			graph.graph_list[entrance][id].second -= path_flow;
+			graph.graph_list[id][entrance].second += path_flow;
+		}
+		max_flow += path_flow;
+	}
+	return max_flow;
+
+}
+
+vector<int> ShortestWay(GraphStructure& graph, int entrance, int exit) {
+
 }
 
 vector<int> TopologicalSorting(GraphStructure& graph) {
@@ -76,7 +144,7 @@ void ViewGraph(unordered_map<int, Pipe> data_P, unordered_map<int, KS> data_KS) 
 	}
 }
 
-bool CheckCicle(unordered_map<int, Pipe> data_P, unordered_map<int, KS> data_KS) 
+bool CheckCicle(unordered_map<int, Pipe> data_P, unordered_map<int, KS> data_KS)
 {
 	for (int i = data_KS.size(); i > 0; i--) {
 		vector<int> ids_of_ks = get_ids_of_ks(data_KS);
@@ -98,5 +166,5 @@ bool CheckCicle(unordered_map<int, Pipe> data_P, unordered_map<int, KS> data_KS)
 			}
 		}
 	}
-	return (data_KS.size() == 0); 
+	return (data_KS.size() == 0);
 }

@@ -31,7 +31,7 @@ int main() {
 		PrintMenu();  // вызываем меню
 		cout << "Кнопка: ";
 		cin.clear();
-		int choice = get_correct_value(0, 10);
+		int choice = get_correct_value(0, 11);
 		switch (choice) 
 		{
 		case 1:
@@ -105,6 +105,17 @@ int main() {
 			else {
 				cout << "Нет информации для просмотра";
 			}
+			break;
+		}
+		case 11:
+		{
+			GraphStructure gas_network = CreateGraph(network.TakePipe(), network.TakeKS());
+			cout << "Введите id исходной вершины: ";
+			int source = get_correct_value<int>(1, INT_MAX);
+			cout << "Введите id конечной вершины: ";
+			int exit = get_correct_value<int>(1, INT_MAX);
+			double max_flow = FordFulkerson(gas_network, source, exit);
+			cout << "Максимальный поток в сети: " << max_flow << '\n';
 			break;
 		}
 		case 0:
