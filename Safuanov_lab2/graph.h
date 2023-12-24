@@ -15,3 +15,4 @@ vector<int> TopologicalSorting(GraphStructure& graph);
 void ViewGraph(unordered_map<int, Pipe> data_P, unordered_map<int, KS> data_KS);
 bool CheckCicle(unordered_map<int, Pipe> data_P, unordered_map<int, KS> data_KS);
 double FordFulkerson(GraphStructure& graph, int entrance, int exit);
+vector<int> ShortestWay(GraphStructure& graph, int start, int end);

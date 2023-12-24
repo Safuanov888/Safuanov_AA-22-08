@@ -105,8 +105,43 @@ double FordFulkerson(GraphStructure& graph, int entrance, int exit) {
 
 }
 
-vector<int> ShortestWay(GraphStructure& graph, int entrance, int exit) {
+vector<int> ShortestWay(GraphStructure& graph, int start, int end) {
+	unordered_map<int, double> distance;
+	unordered_map<int, int> parent;
+	priority_queue<pair<double, int>, vector<pair<double, int>>, greater<pair<double, int>>> pq;
 
+	for (const auto& [id, _] : graph.graph_list) {
+		distance[id] = INFINITY;
+	}
+	distance[start] = 0;
+
+	pq.push({ 0, start });
+
+	while (!pq.empty()) {
+		int u = pq.top().second;
+		pq.pop();
+
+		for (const auto& [v, edge] : graph.graph_list[u]) {
+			double weight = edge.first;
+			double capacity = edge.second;
+			if ((capacity > 0 && distance[v] > distance[u] + weight) || v == end) {
+				distance[v] = distance[u] + weight;
+				pq.push({ distance[v], v });
+				parent[v] = u;
+			}
+		}
+	}
+
+	vector<int> path;
+	if (distance[end] != INFINITY) {
+		for (int v = end; v != start; v = parent[v]) {
+			path.push_back(v);
+		}
+		path.push_back(start);
+		reverse(path.begin(), path.end());
+	}
+
+	return path;
 }
 
 vector<int> TopologicalSorting(GraphStructure& graph) {

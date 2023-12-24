@@ -31,7 +31,7 @@ int main() {
 		PrintMenu();  // вызываем меню
 		cout << "Кнопка: ";
 		cin.clear();
-		int choice = get_correct_value(0, 11);
+		int choice = get_correct_value(0, 12);
 		switch (choice) 
 		{
 		case 1:
@@ -116,6 +116,26 @@ int main() {
 			int exit = get_correct_value<int>(1, INT_MAX);
 			double max_flow = FordFulkerson(gas_network, source, exit);
 			cout << "Максимальный поток в сети: " << max_flow << '\n';
+			break;
+		}
+		case 12:
+		{
+			GraphStructure gas_network = CreateGraph(network.TakePipe(), network.TakeKS());
+			cout << "Введите id исходной вершины: ";
+			int start = get_correct_value<int>(1, INT_MAX);
+			cout << "Введите id конечной вершины: ";
+			int end = get_correct_value<int>(1, INT_MAX);
+			vector<int> min_path = ShortestWay(gas_network, start, end);
+			if (!min_path.empty()) {
+				cout << "Кратчайший путь: ";
+				for (int value = 0; value < min_path.size(); value++) {
+					cout << min_path[value] << " ";
+				}
+				cout << '\n';
+			}
+			else {
+				cout << "Кратчайший путь не найден" << '\n';
+			}
 			break;
 		}
 		case 0:
